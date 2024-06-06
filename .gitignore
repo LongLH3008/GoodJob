@@ -3,4 +3,4 @@ BackEnd/.env
 BackEnd/prisma/migrations
 
 FrontEnd/node_modules
-FrontEnd/.envR
+FrontEnd/.env
