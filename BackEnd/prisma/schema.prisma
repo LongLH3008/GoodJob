@@ -1,0 +1,413 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model CV {
+  id                      String                    @id @db.Uuid
+  applicant_id            String                    @db.Uuid
+  name                    String                    @db.VarChar(30)
+  avatar                  String?                   @db.VarChar(255)
+  recommended             String?                   @default("0") @db.Bit(1)
+  createAt                DateTime?                 @default(now()) @db.Timestamptz(6)
+  updateAt                DateTime?                 @db.Timestamptz(6)
+  User                    User                      @relation(fields: [applicant_id], references: [id], onDelete: Cascade)
+  CV_Education            CV_Education[]
+  CV_Experience           CV_Experience[]
+  CV_More                 CV_More[]
+  CV_Reference            CV_Reference[]
+  CV_Skills               CV_Skills[]
+  Recruitment_Information Recruitment_Information[]
+
+  @@index([applicant_id], map: "applicant_id_index")
+  @@index([id], map: "id_index")
+}
+
+model CV_Education {
+  id        Int       @id @default(autoincrement())
+  cv_id     String?   @db.Uuid
+  school    String    @db.VarChar(30)
+  time_from String    @db.VarChar(7)
+  time_to   String    @db.VarChar(7)
+  GPA       Float?
+  degree    degree_t? @default(Diploma)
+  CV        CV?       @relation(fields: [cv_id], references: [id], onDelete: Cascade)
+}
+
+model CV_Experience {
+  id        Int        @id @default(autoincrement())
+  cv_id     String     @db.Uuid
+  company   String     @db.VarChar(30)
+  time_from String     @db.VarChar(7)
+  time_to   String     @db.VarChar(7)
+  exp_role  exp_role_t
+  describe  String?    @db.VarChar(255)
+  CV        CV         @relation(fields: [cv_id], references: [id], onDelete: Cascade)
+}
+
+model CV_More {
+  id       Int    @id @default(autoincrement())
+  cv_id    String @db.Uuid
+  name     String @db.VarChar(14)
+  describe String @db.VarChar(255)
+  CV       CV     @relation(fields: [cv_id], references: [id], onDelete: Cascade)
+}
+
+model CV_Reference {
+  id       Int        @id @default(autoincrement())
+  cv_id    String?    @db.Uuid
+  name     String     @db.VarChar(255)
+  email    String     @db.VarChar(255)
+  company  String     @db.VarChar(255)
+  ref_role ref_role_t @default(Manager)
+  CV       CV?        @relation(fields: [cv_id], references: [id], onDelete: Cascade)
+}
+
+model CV_Services {
+  id                 Int                   @id @default(autoincrement())
+  name               String                @db.VarChar(255)
+  price              Float
+  discount           Int?
+  cv_service_expired cv_service_expired_t? @default(No_limit)
+  describe           String                @db.VarChar(255)
+  recommended        Int                   @default(0)
+  totalCv            Int
+  createAt           DateTime?             @default(now()) @db.Timestamptz(6)
+  updateAt           DateTime?             @db.Timestamptz(6)
+  Order              Order[]
+  User_ServiceUsing  User_ServiceUsing[]
+}
+
+model CV_Skills {
+  id       Int     @id @default(autoincrement())
+  cv_id    String? @db.Uuid
+  name     String  @db.VarChar(15)
+  describe String  @db.VarChar(100)
+  CV       CV?     @relation(fields: [cv_id], references: [id], onDelete: Cascade)
+}
+
+model CV_import {
+  id                      String                    @id @db.Uuid
+  applicant_id            String?                   @db.Uuid
+  file                    String                    @db.VarChar(255)
+  createAt                DateTime?                 @default(now()) @db.Timestamptz(6)
+  User                    User?                     @relation(fields: [applicant_id], references: [id], onDelete: Cascade)
+  Recruitment_Information Recruitment_Information[]
+
+  @@index([applicant_id, id], map: "applicant_id_id_index")
+}
+
+model Company {
+  id          String        @id @db.Uuid
+  employer_id String        @db.Uuid
+  name        String        @db.VarChar(50)
+  establish   String        @db.VarChar(4)
+  size        Int
+  business    String        @db.VarChar(50)
+  introduce   String?       @db.VarChar(500)
+  taxcode     String        @db.VarChar(14)
+  license     String        @db.VarChar(255)
+  check       String?       @default("0") @db.Bit(1)
+  createAt    DateTime?     @default(now()) @db.Timestamptz(6)
+  updateAt    DateTime?     @db.Timestamptz(6)
+  User        User          @relation(fields: [employer_id], references: [id], onDelete: Cascade)
+  Recruitment Recruitment[]
+  Reviews     Reviews[]
+
+  @@index([name, id, employer_id], map: "name_id_employer_id_index")
+}
+
+model Conversation {
+  id                                     Int                     @id @default(autoincrement())
+  starter_userid                         String                  @db.Uuid
+  partner_userid                         String                  @db.Uuid
+  createAt                               DateTime?               @default(now()) @db.Timestamptz(6)
+  updateAt                               DateTime?               @db.Timestamptz(6)
+  User_Conversation_partner_useridToUser User                    @relation("Conversation_partner_useridToUser", fields: [partner_userid], references: [id], onDelete: Cascade)
+  User_Conversation_starter_useridToUser User                    @relation("Conversation_starter_useridToUser", fields: [starter_userid], references: [id], onDelete: Cascade)
+  Conversation_Messages                  Conversation_Messages[]
+
+  @@index([starter_userid, partner_userid], map: "starter_userid_partner_userid_index")
+}
+
+model Conversation_Messages {
+  id              Int              @id @default(autoincrement())
+  conversation_id Int
+  content         String           @db.VarChar(1000)
+  sender_id       String           @db.Uuid
+  message_status  message_status_t @default(Sended)
+  createAt        DateTime?        @default(now()) @db.Timestamptz(6)
+  updateAt        DateTime?        @db.Timestamptz(6)
+  ref_message_id  String?
+  Conversation    Conversation     @relation(fields: [conversation_id], references: [id], onDelete: Cascade)
+  User            User             @relation(fields: [sender_id], references: [id], onDelete: Cascade)
+
+  @@index([conversation_id, sender_id], map: "conversation_id_sender_id_index")
+}
+
+model Order {
+  id                   Int                   @id @default(autoincrement())
+  user_id              String?               @db.Uuid
+  order_status         order_status_t?       @default(Waiting)
+  cost                 Int?
+  createAt             DateTime?             @default(now()) @db.Timestamptz(6)
+  updateAt             DateTime?             @db.Timestamptz(6)
+  recr_service_id      Int?
+  cv_service_id        Int?
+  CV_Services          CV_Services?          @relation(fields: [cv_service_id], references: [id], onDelete: Cascade)
+  Recruitment_Services Recruitment_Services? @relation(fields: [recr_service_id], references: [id], onDelete: Cascade)
+  User                 User?                 @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id], map: "user_id_index")
+}
+
+model Recruitment {
+  id                      String                    @id @db.Uuid
+  company_id              String                    @db.Uuid
+  job                     String                    @db.VarChar(14)
+  position                String                    @default("Employee") @db.VarChar(14)
+  exp                     Int
+  salary                  String                    @db.VarChar(30)
+  benefits                String?                   @db.VarChar(300)
+  describe                String?                   @db.VarChar(300)
+  require                 String?                   @db.VarChar(300)
+  end                     DateTime                  @db.Date
+  workform                String                    @db.VarChar(15)
+  recr_status             recr_status_t?            @default(Recruiting)
+  createAt                DateTime?                 @default(now()) @db.Timestamptz(6)
+  updateAt                DateTime?                 @db.Timestamptz(6)
+  recommended             String?                   @default("0") @db.Bit(1)
+  Company                 Company                   @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  Recruitment_Information Recruitment_Information[]
+
+  @@index([company_id, id], map: "company_id_id_index")
+}
+
+model Recruitment_Information {
+  id               Int                @id @default(autoincrement())
+  cv_id            String?            @db.Uuid
+  file_id          String?            @db.Uuid
+  recr_id          String             @db.Uuid
+  createAt         DateTime?          @default(now()) @db.Timestamptz(6)
+  updateAt         DateTime?          @db.Timestamptz(6)
+  recr_info_status recr_info_status_t @default(under_review)
+  CV               CV?                @relation(fields: [cv_id], references: [id], onDelete: Cascade)
+  CV_import        CV_import?         @relation(fields: [file_id], references: [id], onDelete: Cascade)
+  Recruitment      Recruitment        @relation(fields: [recr_id], references: [id], onDelete: Cascade)
+
+  @@index([cv_id, file_id, recr_id], map: "cv_id_file_id_recr_id_index")
+}
+
+model Recruitment_Services {
+  id                   Int                     @id @default(autoincrement())
+  name                 String                  @db.VarChar(255)
+  price                Int
+  discount             Int
+  recr_service_expired recr_service_expired_t? @default(No_limit)
+  describe             String                  @db.VarChar(255)
+  recommended          Int
+  totalRecr            Int
+  createAt             DateTime?               @default(now()) @db.Timestamptz(6)
+  updateAt             DateTime?               @db.Timestamptz(6)
+  Order                Order[]
+  User_ServiceUsing    User_ServiceUsing[]
+}
+
+model Reviews {
+  id           Int       @id @default(autoincrement())
+  applicant_id String    @db.Uuid
+  company_id   String    @db.Uuid
+  content      String?   @db.VarChar(500)
+  vote         vote_t    @default(Very_Good)
+  createAt     DateTime? @default(now()) @db.Timestamptz(6)
+  updateAt     DateTime? @db.Timestamptz(6)
+  User         User      @relation(fields: [applicant_id], references: [id], onDelete: Cascade)
+  Company      Company   @relation(fields: [company_id], references: [id], onDelete: Cascade)
+
+  @@index([applicant_id, company_id], map: "applicant_id_company_id_index")
+}
+
+model User {
+  id                                             String                  @id @db.Uuid
+  email                                          String                  @db.VarChar(40)
+  password                                       String                  @db.VarChar(255)
+  user_type                                      user_type_t?            @default(Local)
+  user_role                                      user_role_t?            @default(Applicant)
+  user_status                                    user_status_t?          @default(offline)
+  check                                          String?                 @default("1") @db.Bit(1)
+  createAt                                       DateTime?               @default(now()) @db.Timestamptz(6)
+  updateAt                                       DateTime?               @db.Timestamptz(6)
+  CV                                             CV[]
+  CV_import                                      CV_import[]
+  Company                                        Company[]
+  Conversation_Conversation_partner_useridToUser Conversation[]          @relation("Conversation_partner_useridToUser")
+  Conversation_Conversation_starter_useridToUser Conversation[]          @relation("Conversation_starter_useridToUser")
+  Conversation_Messages                          Conversation_Messages[]
+  Notification                                   Notification[]
+  Order                                          Order[]
+  Reviews                                        Reviews[]
+  User_Contact                                   User_Contact[]
+  User_Information                               User_Information[]
+  User_ServiceUsing                              User_ServiceUsing[]
+  User_Social                                    User_Social[]
+
+  @@index([id, email], map: "id_email_index")
+}
+
+model Notification {
+  id           Int             @id @default(autoincrement())
+  user_id      String          @db.Uuid
+  notif_status notif_status_t? @default(Default)
+  content      String          @db.VarChar(255)
+  createAt     DateTime?       @default(now()) @db.Timestamptz(6)
+  User         User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model User_Contact {
+  id             Int     @id @default(autoincrement())
+  user_id        String  @db.Uuid
+  city           String  @db.VarChar(255)
+  district       String  @db.VarChar(255)
+  detail_address String  @db.VarChar(255)
+  phone          String? @db.VarChar(14)
+  User           User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model User_Information {
+  id           Int             @id @default(autoincrement())
+  user_id      String          @db.Uuid
+  avatar       String?         @db.VarChar(255)
+  name         String          @db.VarChar(40)
+  birth        String?
+  gender       gender_t
+  company_role company_role_t? @default(Employee)
+  User         User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model User_ServiceUsing {
+  id                   Int                   @id @default(autoincrement())
+  recr_service_id      Int?
+  cv_service_id        Int?
+  expiredAt            String?
+  user_id              String                @db.Uuid
+  CV_Services          CV_Services?          @relation(fields: [cv_service_id], references: [id], onDelete: Cascade)
+  Recruitment_Services Recruitment_Services? @relation(fields: [recr_service_id], references: [id], onDelete: Cascade)
+  User                 User                  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model User_Social {
+  id          Int           @id
+  user_id     String        @db.Uuid
+  link        String        @db.VarChar(255)
+  social_type social_type_t
+  User        User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+enum notif_status_t {
+  Default
+  Warning
+  Success
+}
+
+enum company_role_t {
+  Employee
+  Department_Manager @map("Department Manager")
+  Director
+  CEO
+}
+
+enum cv_service_expired_t {
+  One_Week    @map("One Week")
+  Two_Week    @map("Two Week")
+  One_Month   @map("One Month")
+  Three_Month @map("Three Month")
+  No_limit    @map("No limit")
+}
+
+enum degree_t {
+  Banchelor
+  Master
+  Doctorate
+  Diploma
+}
+
+enum exp_role_t {
+  Employee
+  Manager
+}
+
+enum gender_t {
+  Male
+  Female
+}
+
+enum message_status_t {
+  Seen
+  Sended
+}
+
+enum order_status_t {
+  Canceled
+  Complete
+  Waiting
+}
+
+enum recr_info_status_t {
+  apporve
+  reject
+  under_review @map("under review")
+}
+
+enum recr_service_expired_t {
+  One_Month   @map("One Month")
+  Three_Month @map("Three Month")
+  Six_Month   @map("Six Month")
+  No_limit    @map("No limit")
+}
+
+enum recr_status_t {
+  Expired
+  Recruiting
+}
+
+enum ref_role_t {
+  Manager
+  Employee
+  CEO
+  Director
+}
+
+enum social_type_t {
+  LinkedIn
+  Facebook
+  Twitter
+  Insta
+}
+
+enum user_role_t {
+  Administrator
+  Applicant
+  Employer
+}
+
+enum user_status_t {
+  online
+  offline
+}
+
+enum user_type_t {
+  Local
+  Google
+}
+
+enum vote_t {
+  Terrible
+  Poor
+  Average
+  Good
+  Very_Good @map("Very Good")
+}
