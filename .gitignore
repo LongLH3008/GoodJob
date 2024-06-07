@@ -1,6 +1,7 @@
 BackEnd/node_modules
 BackEnd/.env
 BackEnd/prisma/migrations
+BackEnd/example
 
 FrontEnd/node_modules
 FrontEnd/.env
