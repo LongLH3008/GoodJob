@@ -95,6 +95,7 @@ model CV_import {
   applicant_id            String?                   @db.Uuid
   file                    String                    @db.VarChar(255)
   createAt                DateTime?                 @default(now()) @db.Timestamptz(6)
+  name                    String                    @db.VarChar(30)
   User                    User?                     @relation(fields: [applicant_id], references: [id], onDelete: Cascade)
   Recruitment_Information Recruitment_Information[]
 
