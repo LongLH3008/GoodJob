@@ -177,11 +177,11 @@ model Recruitment {
   describe                String?                   @db.VarChar(300)
   require                 String?                   @db.VarChar(300)
   end                     DateTime                  @db.Date
-  workform                String                    @db.VarChar(15)
   recr_status             recr_status_t?            @default(Recruiting)
   createAt                DateTime?                 @default(now()) @db.Timestamptz(6)
   updateAt                DateTime?                 @db.Timestamptz(6)
   recommended             String?                   @default("0") @db.Bit(1)
+  work_format             recr_format_t?            @default(FullTime)
   Company                 Company                   @relation(fields: [company_id], references: [id], onDelete: Cascade)
   Recruitment_Information Recruitment_Information[]
 
@@ -316,7 +316,7 @@ enum notif_status_t {
 
 enum company_role_t {
   Employee
-  Department_Manager @map("Department Manager")
+  Manager  @map("Manager")
   Director
   CEO
 }
@@ -411,4 +411,14 @@ enum vote_t {
   Average
   Good
   Very_Good @map("Very Good")
+}
+
+enum recr_format_t {
+  FullTime
+  PartTime
+  Remote
+  Freelance
+  Contract
+  Temporary
+  Internship
 }

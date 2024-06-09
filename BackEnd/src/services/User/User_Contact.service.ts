@@ -15,35 +15,22 @@ class User_Contact {
 	static async createByUserId(user_id: UID, dt: any) {
 		const isExist = await prisma.user_Contact.findFirst({ where: { user_id } });
 		if (isExist) throw new API_Error("This user already have information", StatusCode.UNAUTHORIZED);
-		const { city, district, detail_address, phone } = dt;
-		SchemaValidate(ContactSchema, { city, district, detail_address, phone });
 		return await prisma.user_Contact.create({
-			data: {
-				user_id,
-				city,
-				district,
-				detail_address,
-				phone,
-			},
+			data: { user_id, ...dt },
 		});
 	}
 
 	static async updateByUserId(user_id: UID, dt: any) {
-		const contact = await this.getByUserId(user_id);
 		const { city, district, detail_address, phone } = dt;
-		const { id } = contact;
 		SchemaValidate(ContactSchema, { city, district, detail_address, phone });
+		const contact = await this.getByUserId(user_id);
+		const { id } = contact;
 		return await prisma.user_Contact.update({
 			where: {
 				id,
 				user_id,
 			},
-			data: {
-				city,
-				district,
-				detail_address,
-				phone,
-			},
+			data: { ...dt },
 		});
 	}
 }

@@ -20,7 +20,7 @@ class CompanyController {
 
 	static async createCompany(req: Request, res: Response) {
 		return new API_Response({
-			message: "Update company successfully",
+			message: "Create company successfully",
 			metadata: await Company.create(req.body),
 		}).send(res);
 	}

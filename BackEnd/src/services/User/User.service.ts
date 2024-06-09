@@ -36,53 +36,11 @@ class User {
 				user_role: true,
 				user_type: true,
 				check: true,
-				User_Contact: {
-					select: {
-						city: true,
-						district: true,
-						detail_address: true,
-						phone: true,
-					},
-				},
-
-				User_Information: {
-					select: {
-						avatar: true,
-						name: true,
-						birth: true,
-						gender: true,
-						company_role: true,
-					},
-				},
+				User_Contact: true,
+				User_Information: true,
 				User_Social: true,
-				User_ServiceUsing: {
-					select: {
-						recr_service_id: true,
-						cv_service_id: true,
-						expiredAt: true,
-						CV_Services: {
-							select: {
-								name: true,
-								describe: true,
-								totalCv: true,
-								recommended: true,
-							},
-						},
-						Recruitment_Services: {
-							select: {
-								name: true,
-								describe: true,
-								totalRecr: true,
-								recommended: true,
-							},
-						},
-					},
-				},
-				Conversation_Conversation_starter_useridToUser: {
-					include: {
-						Conversation_Messages: true,
-					},
-				},
+				User_ServiceUsing: { include: { CV_Services: true, Recruitment_Services: true } },
+				Conversation_Conversation_starter_useridToUser: { include: { Conversation_Messages: true } },
 				CV_import: true,
 				CV: true,
 				Notification: true,
@@ -92,6 +50,10 @@ class User {
 			},
 		});
 		if (!user) throw new API_Error("User does not exist", StatusCode.NOT_FOUND);
+		const {} = user;
+		if (user.user_role == "Applicant") {
+			const data = {};
+		}
 		return user;
 	}
 
@@ -141,20 +103,24 @@ class User {
 	}
 
 	static async createInfo(user_id: UID, dt: IUserInfo) {
+		const { city, district, detail_address, phone, avatar, name, birth, gender, company_role } = dt;
+		SchemaValidate(ContactSchema, { city, district, detail_address, phone });
+		SchemaValidate(InfoSchema, { avatar, name, birth, gender, company_role });
 		await this.get(user_id);
-		const newInfo = await User_Contact.createByUserId(user_id, dt);
-		const newContact = await User_Info.createByUserId(user_id, dt);
+		const newInfo = await User_Info.createByUserId(user_id, { avatar, name, birth, gender, company_role });
+		const newContact = await User_Contact.createByUserId(user_id, { city, district, detail_address, phone });
 		this.check(user_id);
 		await User_ServiceUsing.addFreeTrial(user_id);
 		return { newInfo, newContact };
 	}
 
 	static async updateInfo(user_id: UID, dt: any) {
-		const user = await this.get(user_id);
-		await User_Contact.getByUserId(user_id);
-		await User_Info.getByUserId(user_id);
-		const newContact = await User_Contact.updateByUserId(user_id, dt);
-		const newInfo = await User_Info.updateByUserId(user_id, dt);
+		const { city, district, detail_address, phone, avatar, name, birth, gender, company_role } = dt;
+		SchemaValidate(ContactSchema, { city, district, detail_address, phone });
+		SchemaValidate(InfoSchema, { avatar, name, birth, gender, company_role });
+		await Promise.all([this.get(user_id), User_Contact.getByUserId(user_id), User_Info.getByUserId(user_id)]);
+		const newInfo = await User_Info.updateByUserId(user_id, { avatar, name, birth, gender, company_role });
+		const newContact = await User_Contact.updateByUserId(user_id, { city, district, detail_address, phone });
 		this.updateTime(user_id);
 		return { newInfo, newContact };
 	}

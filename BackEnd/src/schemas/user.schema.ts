@@ -1,10 +1,9 @@
 import Joi from "joi";
 
 const genderEnum = ["Male", "Female"];
-const roleEnum = ["Employee", "Department Manager", "Director", "CEO"];
+const roleEnum = ["Employee", "Manager", "Director", "CEO"];
 
 export const InfoSchema = Joi.object({
-	// Info
 	avatar: Joi.string().allow(""),
 	name: Joi.string().min(3).max(30).required().required(),
 	birth: Joi.any().required(),
@@ -17,7 +16,6 @@ export const InfoSchema = Joi.object({
 });
 
 export const ContactSchema = Joi.object({
-	// Contact
 	city: Joi.string().required(),
 	district: Joi.string().required(),
 	detail_address: Joi.string().required(),
