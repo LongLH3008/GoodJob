@@ -1,9 +1,7 @@
-import { response } from "express";
 import prisma from "../../../prisma";
 import { StatusCode } from "../../enum/HttpStatus";
 import { ICompany } from "../../interfaces/Company.interface";
 import { UID } from "../../interfaces/User.interface";
-import Locals from "../../providers/Locals";
 import { CompanySchema } from "../../schemas/company.schema";
 import { SchemaValidate } from "../../schemas/validate";
 import API_Error from "../../utils/Api.error";
@@ -32,10 +30,16 @@ class Company {
 		return true;
 	}
 
-	private static async checkRoleUser(employer_id: UID) {
-		const user = await User.get(employer_id);
-		if (user.user_role !== "Employer" || user.check !== "1")
-			throw new API_Error("This User does not have permission", StatusCode.UNAUTHORIZED);
+	static async checkRoleUser(employer_id: UID) {
+		const employer = await User.get(employer_id);
+		if (employer.user_role !== "Employer")
+			throw new API_Error("Your account does not have permission", StatusCode.UNAUTHORIZED);
+		if (employer.User_Contact.length == 0 || employer.User_Information.length == 0) {
+			throw new API_Error("You need to provide your information first", StatusCode.UNAUTHORIZED);
+		}
+		if (employer.check !== "1") {
+			throw new API_Error("Your account is awaiting verification approval", StatusCode.UNAUTHORIZED);
+		}
 		return;
 	}
 
@@ -56,7 +60,10 @@ class Company {
 	}
 
 	static async get(id: UID) {
-		const company = await prisma.company.findFirst({ where: { id } });
+		const company = await prisma.company.findFirst({
+			where: { id },
+			include: { Recruitment: true, Reviews: true },
+		});
 		if (!company) throw new API_Error("Company not found", StatusCode.NOT_FOUND);
 		return company;
 	}
@@ -67,28 +74,21 @@ class Company {
 	}
 
 	static async create(dt: ICompany) {
-		const { name, license, taxcode, employer_id, size, business, introduce, establish } = dt;
+		const { name, employer_id } = dt;
 		SchemaValidate(CompanySchema, dt);
 		await Promise.all([this.checkRoleUser(employer_id), this.checkExist(employer_id, name)]);
 		// const result = await this.checkTaxCode(taxcode);
 		return await prisma.company.create({
 			data: {
+				...dt,
 				id: generateUUID(),
-				employer_id,
-				name,
-				establish,
-				size,
-				business,
-				introduce,
-				taxcode,
-				license,
 				check: "0",
 			},
 		});
 	}
 
 	static async update(id: UID, dt: ICompany) {
-		const { name, license, taxcode, employer_id, size, business, introduce, establish } = dt;
+		const { name, employer_id } = dt;
 		SchemaValidate(CompanySchema, dt);
 		await this.checkRoleUser(employer_id);
 		const isExsit = await prisma.company.findFirst({ where: { id: { not: id }, name } });
@@ -96,15 +96,7 @@ class Company {
 		// const result = await this.checkTaxCode(taxcode);
 		return await prisma.company.update({
 			where: { id },
-			data: {
-				name,
-				establish,
-				size,
-				business,
-				introduce,
-				taxcode,
-				license,
-			},
+			data: { ...dt },
 		});
 	}
 }

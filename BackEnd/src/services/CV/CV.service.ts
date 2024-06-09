@@ -15,8 +15,13 @@ import CV_Skills from "./CVSkill.service";
 class CV {
 	static async checkApplicant(applicant_id: UID, action: "update" | "create" | "turnOnRecommended" | "delete") {
 		const applicant = await User.get(applicant_id);
-		if (applicant.user_role !== "Applicant" || applicant.check !== "1") {
-			throw new API_Error("This user does not have permission", StatusCode.UNAUTHORIZED);
+		if (applicant.user_role !== "Applicant")
+			throw new API_Error("Your account does not have permission", StatusCode.UNAUTHORIZED);
+		if (applicant.User_Contact.length == 0 || applicant.User_Information.length == 0) {
+			throw new API_Error("You need to provide your information first", StatusCode.UNAUTHORIZED);
+		}
+		if (applicant.check !== "1") {
+			throw new API_Error("Your account is awaiting verification approval", StatusCode.UNAUTHORIZED);
 		}
 		const { CV, CV_import, User_ServiceUsing } = applicant;
 		const { CV_Services } = User_ServiceUsing[0];
@@ -26,14 +31,14 @@ class CV {
 				case "create":
 					if (CV.length + CV_import.length + 1 > CV_Services.totalCv)
 						throw new API_Error(
-							"The number of CV creations has reached the limit, Upgrade for more",
+							"CV creations has reached the limit, Upgrade for more",
 							StatusCode.UNAUTHORIZED
 						);
 					break;
 				case "turnOnRecommended": {
 					if (cv.length + 1 > CV_Services.recommended)
 						throw new API_Error(
-							"The recommended of CV has reached the limit, Upgrade for more",
+							"CV recommended has reached the limit, Upgrade for more",
 							StatusCode.UNAUTHORIZED
 						);
 					break;
@@ -66,6 +71,13 @@ class CV {
 				CV_More: true,
 				CV_Reference: true,
 				CV_Skills: true,
+				Recruitment_Information: {
+					select: {
+						id: true,
+						recr_info_status: true,
+						Recruitment: true,
+					},
+				},
 			},
 		});
 		if (!cv) throw new API_Error("This cv does not exist", StatusCode.NOT_FOUND);
