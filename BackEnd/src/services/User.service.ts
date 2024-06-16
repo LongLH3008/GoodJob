@@ -1,23 +1,18 @@
-import prisma from "../../../prisma";
-import { ReasonStatusCode, StatusCode } from "../../enum/HttpStatus";
-import { IUserInfo, TRegister, UID } from "../../interfaces/User.interface";
-import { RegisterSchema } from "../../schemas/auth.schema";
-import { ContactSchema, InfoSchema } from "../../schemas/user.schema";
-import { SchemaValidate } from "../../schemas/validate";
-import API_Error from "../../utils/Api.error";
-import { generateUUID } from "../../utils/GenerateUUID";
+import prisma from "../../prisma";
+import { ReasonStatusCode, StatusCode } from "../enum/HttpStatus";
+import { IUserInfo, TRegister, UID } from "../interfaces/User.interface";
+import { RegisterSchema } from "../schemas/auth.schema";
+import { ContactSchema, InfoSchema } from "../schemas/user.schema";
+import { SchemaValidate } from "../schemas/validate";
+import API_Error from "../utils/Api.error";
+import { generateUUID } from "../utils/GenerateUUID";
 import bcrypt from "bcryptjs";
 import User_Contact from "./User_Contact.service";
 import User_Info from "./User_Info.service";
 import User_ServiceUsing from "./User_service_using.service";
+import { generateIOSTime, generateLocaleTime } from "../utils/Time";
 
 class User {
-	private static async updateTime(id: UID) {
-		return await prisma.user.update({
-			where: { id },
-			data: { id },
-		});
-	}
 	static async getAll() {
 		const users = await prisma.user.findMany();
 		if (!users) throw new API_Error(ReasonStatusCode.NOT_FOUND, StatusCode.NOT_FOUND);
@@ -29,32 +24,58 @@ class User {
 			where: {
 				id,
 			},
-			select: {
-				id: true,
-				email: true,
-				user_status: true,
-				user_role: true,
-				user_type: true,
-				check: true,
-				User_Contact: true,
-				User_Information: true,
-				User_Social: true,
-				User_ServiceUsing: { include: { CV_Services: true, Recruitment_Services: true } },
-				Conversation_Conversation_starter_useridToUser: { include: { Conversation_Messages: true } },
-				CV_import: true,
-				CV: true,
-				Notification: true,
-				Order: true,
-				Company: true,
-				Reviews: true,
-			},
 		});
 		if (!user) throw new API_Error("User does not exist", StatusCode.NOT_FOUND);
-		const {} = user;
-		if (user.user_role == "Applicant") {
-			const data = {};
-		}
-		return user;
+		user.createAt = generateLocaleTime(user.createAt);
+		user.updateAt = user.updateAt == null ? null : generateLocaleTime(user.updateAt);
+		const [
+			User_Contact,
+			User_Information,
+			User_Social,
+			Conversation,
+			Notification,
+			Order,
+			User_ServiceUsing,
+			CV,
+			CV_import,
+			Reviews,
+			Company,
+		] = await prisma.$transaction([
+			prisma.user_Contact.findFirst({ where: { user_id: id } }),
+			prisma.user_Information.findFirst({ where: { user_id: id } }),
+			prisma.user_Social.findMany({ where: { user_id: id } }),
+			prisma.conversation.findMany({
+				where: { starter_userid: id },
+				include: { Conversation_Messages: true },
+			}),
+			prisma.notification.findMany({ where: { user_id: id } }),
+			prisma.order.findMany({ where: { user_id: id } }),
+			prisma.user_ServiceUsing.findFirst({
+				where: { user_id: id },
+				include: { CV_Services: true, Recruitment_Services: true },
+			}),
+			prisma.cV.findMany({ where: { applicant_id: id } }),
+			prisma.cV_import.findMany({ where: { applicant_id: id } }),
+			prisma.reviews.findMany({ where: { applicant_id: id } }),
+			prisma.company.findFirst({
+				where: { employer_id: id },
+				include: { Recruitment: true, Reviews: true },
+			}),
+		]);
+		return {
+			...user,
+			User_Contact,
+			User_Information,
+			User_Social,
+			Conversation,
+			Notification,
+			Order,
+			User_ServiceUsing,
+			CV,
+			CV_import,
+			Reviews,
+			Company,
+		};
 	}
 
 	static async create(dt: TRegister) {
@@ -110,7 +131,15 @@ class User {
 		const newInfo = await User_Info.createByUserId(user_id, { avatar, name, birth, gender, company_role });
 		const newContact = await User_Contact.createByUserId(user_id, { city, district, detail_address, phone });
 		this.check(user_id);
-		await User_ServiceUsing.addFreeTrial(user_id);
+		await Promise.all([
+			User_ServiceUsing.addFreeTrial(user_id),
+			prisma.user.update({
+				where: { id: user_id },
+				data: {
+					updateAt: generateIOSTime(),
+				},
+			}),
+		]);
 		return { newInfo, newContact };
 	}
 
@@ -118,10 +147,19 @@ class User {
 		const { city, district, detail_address, phone, avatar, name, birth, gender, company_role } = dt;
 		SchemaValidate(ContactSchema, { city, district, detail_address, phone });
 		SchemaValidate(InfoSchema, { avatar, name, birth, gender, company_role });
-		await Promise.all([this.get(user_id), User_Contact.getByUserId(user_id), User_Info.getByUserId(user_id)]);
+		await Promise.all([
+			this.get(user_id),
+			User_Contact.getByUserId(user_id),
+			User_Info.getByUserId(user_id),
+			prisma.user.update({
+				where: { id: user_id },
+				data: {
+					updateAt: generateIOSTime(),
+				},
+			}),
+		]);
 		const newInfo = await User_Info.updateByUserId(user_id, { avatar, name, birth, gender, company_role });
 		const newContact = await User_Contact.updateByUserId(user_id, { city, district, detail_address, phone });
-		this.updateTime(user_id);
 		return { newInfo, newContact };
 	}
 

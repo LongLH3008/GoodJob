@@ -1,7 +1,7 @@
-import prisma from "../../../prisma";
-import { StatusCode } from "../../enum/HttpStatus";
-import { UID } from "../../interfaces/User.interface";
-import API_Error from "../../utils/Api.error";
+import prisma from "../../prisma";
+import { StatusCode } from "../enum/HttpStatus";
+import { UID } from "../interfaces/User.interface";
+import API_Error from "../utils/Api.error";
 import CV from "./CV.service";
 
 class CV_Reference {

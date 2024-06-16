@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<input onchange="logtime()" id="date" type="date" />
+		<script>
+			const logtime = (e) => {
+				const date = document.getElementById("date").value;
+				const a = new Date(date).getTime();
+				const b = new Date(a).toLocaleString("vi-VN");
+				const c = new Date().getTime();
+				const d = a - c;
+
+				console.log(date.split("-").reverse().join("-"));
+				console.log(a);
+				console.log(b);
+				const days = Math.floor(d / (1000 * 60 * 60 * 24));
+				console.log(days);
+			};
+		</script>
+	</body>
+</html>

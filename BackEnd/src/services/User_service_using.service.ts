@@ -1,41 +1,45 @@
-import prisma from "../../../prisma";
-import { StatusCode } from "../../enum/HttpStatus";
-import { UID } from "../../interfaces/User.interface";
-import API_Error from "../../utils/Api.error";
-import CV_Service from "../Service/CV_Service.service";
-import Recr_Service from "../Service/Recr_Service.service";
+import prisma from "../../prisma";
+import { StatusCode } from "../enum/HttpStatus";
+import { UID } from "../interfaces/User.interface";
+import API_Error from "../utils/Api.error";
+import CV_Service from "./Service_Cv.service";
+import Recr_Service from "./Service_Recr.service";
 import User from "./User.service";
 
 class User_ServiceUsing {
-	static expiredTime(service_expired: string | any) {
+	static expiredTime(service_expired: any) {
+		const present = new Date();
+		let future;
+
 		switch (service_expired) {
-			case "No_limit":
-				return 0;
 			case "One_Week":
-				return 7;
+				future = new Date(present);
+				future.setDate(future.getDate() + 7);
+				return future;
 			case "Two_Week":
-				return 14;
+				future = new Date(present);
+				future.setDate(future.getDate() + 14);
+				return future;
 			case "One_Month":
-				return 30;
+				future = new Date(present);
+				future.setMonth(future.getMonth() + 1);
+				return future;
 			case "Three_Month":
-				return 90;
+				future = new Date(present);
+				future.setMonth(future.getMonth() + 3);
+				return future;
 			case "Six_Month":
-				return 180;
+				future = new Date(present);
+				future.setMonth(future.getMonth() + 6);
+				return future;
 			default:
-				return 0;
+				return null;
 		}
 	}
 
 	static async getByUserId(user_id: UID) {
 		const service = await prisma.user_ServiceUsing.findFirst({ where: { user_id } });
 		if (!service) throw new API_Error("User not using any service", StatusCode.NOT_FOUND);
-	}
-
-	static generateExpiredTime(service_expired: string | any) {
-		const present = new Date().getTime();
-		const calc = this.expiredTime(service_expired);
-		const expired = calc !== 0 ? new Date(present + calc * 24 * 60 * 60 * 1000).toISOString() : service_expired;
-		return expired;
 	}
 
 	static async addFreeTrial(user_id: UID) {
@@ -46,12 +50,11 @@ class User_ServiceUsing {
 		const service = await CV_Service.get(service_id);
 		const { cv_service_expired } = service;
 		if (cv_service_expired) {
-			const expiredAt = this.generateExpiredTime(cv_service_expired);
-			const regis = await prisma.user_ServiceUsing.create({
+			await prisma.user_ServiceUsing.create({
 				data: {
 					user_id,
 					cv_service_id: service_id,
-					expiredAt,
+					expiredTime: this.expiredTime(cv_service_expired),
 				},
 			});
 		}
@@ -61,12 +64,14 @@ class User_ServiceUsing {
 		const service = await Recr_Service.get(service_id);
 		const { recr_service_expired } = service;
 		if (recr_service_expired) {
-			const expiredAt = this.generateExpiredTime(recr_service_expired);
-			const regis = await prisma.user_ServiceUsing.create({
+			const expiredTime = this.expiredTime(recr_service_expired);
+			console.log(expiredTime);
+
+			await prisma.user_ServiceUsing.create({
 				data: {
 					user_id,
 					recr_service_id: service_id,
-					expiredAt,
+					expiredTime,
 				},
 			});
 		}

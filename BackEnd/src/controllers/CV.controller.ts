@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import API_Response from "../utils/Api.response";
-import CV from "../services/CV/CV.service";
-import CV_Import from "../services/CV/CVimoprt.service";
+import CV from "../services/CV.service";
+import CV_Import from "../services/CVimoprt.service";
 
 class CVController {
 	static async getAllCv(req: Request, res: Response) {

@@ -1,11 +1,12 @@
-import prisma from "../../../prisma";
-import { StatusCode } from "../../enum/HttpStatus";
-import { UID } from "../../interfaces/User.interface";
-import { CVSchema } from "../../schemas/cv.schema";
-import { SchemaValidate } from "../../schemas/validate";
-import API_Error from "../../utils/Api.error";
-import { generateUUID } from "../../utils/GenerateUUID";
-import User from "../User/User.service";
+import prisma from "../../prisma";
+import { StatusCode } from "../enum/HttpStatus";
+import { UID } from "../interfaces/User.interface";
+import { CVSchema } from "../schemas/cv.schema";
+import { SchemaValidate } from "../schemas/validate";
+import API_Error from "../utils/Api.error";
+import { generateUUID } from "../utils/GenerateUUID";
+import { generateIOSTime, generateLocaleTime } from "../utils/Time";
+import User from "./User.service";
 import CV_Education from "./CVEducation.service";
 import CV_Experience from "./CVExperience.service";
 import CV_More from "./CVMore.service";
@@ -17,15 +18,15 @@ class CV {
 		const applicant = await User.get(applicant_id);
 		if (applicant.user_role !== "Applicant")
 			throw new API_Error("Your account does not have permission", StatusCode.UNAUTHORIZED);
-		if (applicant.User_Contact.length == 0 || applicant.User_Information.length == 0) {
+		if (!applicant.User_Contact || !applicant.User_Information) {
 			throw new API_Error("You need to provide your information first", StatusCode.UNAUTHORIZED);
 		}
 		if (applicant.check !== "1") {
 			throw new API_Error("Your account is awaiting verification approval", StatusCode.UNAUTHORIZED);
 		}
-		const { CV, CV_import, User_ServiceUsing } = applicant;
-		const { CV_Services } = User_ServiceUsing[0];
-		if (CV_Services) {
+		const { CV, CV_import } = applicant;
+		if (applicant && applicant.User_ServiceUsing?.CV_Services) {
+			const { CV_Services } = applicant.User_ServiceUsing;
 			const cv = CV.filter((item) => item.recommended == "1");
 			switch (action) {
 				case "create":
@@ -81,6 +82,8 @@ class CV {
 			},
 		});
 		if (!cv) throw new API_Error("This cv does not exist", StatusCode.NOT_FOUND);
+		cv.createAt = generateLocaleTime(cv.createAt);
+		cv.updateAt = cv.updateAt == null ? null : generateLocaleTime(cv.updateAt);
 		return cv;
 	}
 
@@ -129,6 +132,7 @@ class CV {
 			CV_More.updateMany(id, dt.CV_More),
 			CV_Reference.updateMany(id, dt.CV_Reference),
 			CV_Skills.updateMany(id, dt.CV_Skill),
+			prisma.cV.update({ where: { id }, data: { updateAt: generateIOSTime() } }),
 		]);
 		const newCv = await prisma.cV.update({ where: { id, applicant_id }, data: { name, avatar } });
 		return newCv;

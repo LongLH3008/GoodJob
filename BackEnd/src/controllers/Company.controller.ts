@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Company from "../services/Company/Company.service";
+import Company from "../services/Company.service";
 import API_Response from "../utils/Api.response";
 
 class CompanyController {

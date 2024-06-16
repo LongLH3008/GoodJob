@@ -1,8 +1,8 @@
-import prisma from "../../../prisma";
-import { StatusCode } from "../../enum/HttpStatus";
-import { UID } from "../../interfaces/User.interface";
-import API_Error from "../../utils/Api.error";
-import Conversation from "./Conversation.service";
+import prisma from "../../prisma";
+import { StatusCode } from "../enum/HttpStatus";
+import { UID } from "../interfaces/User.interface";
+import API_Error from "../utils/Api.error";
+import { generateIOSTime, generateLocaleTime } from "../utils/Time";
 
 class Conversation_Messages {
 	static async create(sender_id: UID, conversation_id: number, ref_message_id: string, content: string) {
@@ -23,6 +23,8 @@ class Conversation_Messages {
 			},
 		});
 		if (!mesage) throw new API_Error("This message does not exist", StatusCode.NOT_FOUND);
+		mesage.createAt = generateLocaleTime(mesage.createAt);
+		mesage.updateAt = mesage.updateAt == null ? null : generateLocaleTime(mesage.updateAt);
 		return mesage;
 	}
 
@@ -47,6 +49,7 @@ class Conversation_Messages {
 			},
 			data: {
 				content,
+				updateAt: generateIOSTime(),
 			},
 		});
 	}

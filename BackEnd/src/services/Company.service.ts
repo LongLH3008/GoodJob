@@ -1,12 +1,13 @@
-import prisma from "../../../prisma";
-import { StatusCode } from "../../enum/HttpStatus";
-import { ICompany } from "../../interfaces/Company.interface";
-import { UID } from "../../interfaces/User.interface";
-import { CompanySchema } from "../../schemas/company.schema";
-import { SchemaValidate } from "../../schemas/validate";
-import API_Error from "../../utils/Api.error";
-import User from "../User/User.service";
-import { generateUUID } from "../../utils/GenerateUUID";
+import prisma from "../../prisma";
+import { StatusCode } from "../enum/HttpStatus";
+import { ICompany } from "../interfaces/Company.interface";
+import { UID } from "../interfaces/User.interface";
+import { CompanySchema } from "../schemas/company.schema";
+import { SchemaValidate } from "../schemas/validate";
+import API_Error from "../utils/Api.error";
+import User from "./User.service";
+import { generateUUID } from "../utils/GenerateUUID";
+import { generateIOSTime, generateLocaleTime } from "../utils/Time";
 
 class Company {
 	private static async checkExist(employer_id: UID, name: string) {
@@ -34,7 +35,7 @@ class Company {
 		const employer = await User.get(employer_id);
 		if (employer.user_role !== "Employer")
 			throw new API_Error("Your account does not have permission", StatusCode.UNAUTHORIZED);
-		if (employer.User_Contact.length == 0 || employer.User_Information.length == 0) {
+		if (!employer.User_Contact || !employer.User_Information) {
 			throw new API_Error("You need to provide your information first", StatusCode.UNAUTHORIZED);
 		}
 		if (employer.check !== "1") {
@@ -65,6 +66,8 @@ class Company {
 			include: { Recruitment: true, Reviews: true },
 		});
 		if (!company) throw new API_Error("Company not found", StatusCode.NOT_FOUND);
+		company.createAt = generateLocaleTime(company.createAt);
+		company.updateAt = company.updateAt == null ? null : generateLocaleTime(company.updateAt);
 		return company;
 	}
 
@@ -96,7 +99,7 @@ class Company {
 		// const result = await this.checkTaxCode(taxcode);
 		return await prisma.company.update({
 			where: { id },
-			data: { ...dt },
+			data: { ...dt, updateAt: generateIOSTime() },
 		});
 	}
 }

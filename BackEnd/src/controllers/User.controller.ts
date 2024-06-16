@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import User from "../services/User/User.service";
+import User from "../services/User.service";
 import API_Response from "../utils/Api.response";
 
 class UserController {

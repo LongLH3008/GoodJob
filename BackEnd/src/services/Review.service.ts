@@ -1,26 +1,19 @@
-import prisma from "../../../prisma";
-import { StatusCode } from "../../enum/HttpStatus";
-import { UID } from "../../interfaces/User.interface";
-import { ReviewSchema } from "../../schemas/review.schema";
-import { SchemaValidate } from "../../schemas/validate";
-import API_Error from "../../utils/Api.error";
-import Company from "../Company/Company.service";
-import User from "../User/User.service";
+import prisma from "../../prisma";
+import { StatusCode } from "../enum/HttpStatus";
+import { UID } from "../interfaces/User.interface";
+import { ReviewSchema } from "../schemas/review.schema";
+import { SchemaValidate } from "../schemas/validate";
+import API_Error from "../utils/Api.error";
+import { generateIOSTime, generateLocaleTime } from "../utils/Time";
+import Company from "./Company.service";
+import User from "./User.service";
 
 class Review {
-	private static async checkReviewed(applicant_id: UID, company_id: UID) {
-		const isExist = await prisma.reviews.findFirst({ where: { company_id, applicant_id } });
-		if (isExist) throw new API_Error("Cannot review more than one time", StatusCode.UNAUTHORIZED);
-		return true;
-	}
-
 	private static async checkApplicant(applicant_id: UID) {
 		const user = await User.get(applicant_id);
 		if (user.user_role !== "Applicant" || user.check !== "1") {
 			throw new API_Error("This user does not have permission", StatusCode.UNAUTHORIZED);
 		}
-		console.log(user);
-
 		return true;
 	}
 
@@ -40,6 +33,8 @@ class Review {
 	static async get(id: number) {
 		const review = await prisma.reviews.findFirst({ where: { id: +id } });
 		if (!review) throw new API_Error("No review found", StatusCode.NOT_FOUND);
+		review.createAt = generateLocaleTime(review.createAt);
+		review.updateAt = review.updateAt == null ? null : generateLocaleTime(review.updateAt);
 		return review;
 	}
 
@@ -65,6 +60,7 @@ class Review {
 		SchemaValidate(ReviewSchema, dt);
 		await Promise.all([this.checkApplicant(applicant_id), this.checkCompany(company_id)]);
 		const isExist = await prisma.reviews.findFirst({ where: { applicant_id, company_id } });
+		if (isExist) throw new API_Error("You already have review this company", StatusCode.UNAUTHORIZED);
 		return await prisma.reviews.create({
 			data: {
 				applicant_id,
@@ -90,6 +86,7 @@ class Review {
 			data: {
 				content,
 				vote,
+				updateAt: generateIOSTime(),
 			},
 		});
 	}

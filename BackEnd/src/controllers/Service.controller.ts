@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import CV_Service from "../services/Service/CV_Service.service";
-import Recr_Service from "../services/Service/Recr_Service.service";
+import CV_Service from "../services/Service_Cv.service";
+import Recr_Service from "../services/Service_Recr.service";
 import API_Response from "../utils/Api.response";
 
 class ServiceController {
