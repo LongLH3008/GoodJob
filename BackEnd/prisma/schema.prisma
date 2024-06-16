@@ -180,7 +180,7 @@ model Conversation_Messages {
 model Notification {
   id           Int             @id @default(autoincrement())
   user_id      String
-  notif_status notif_status_t? @default(Default)
+  notif_status notif_status_t? @default(default)
   content      String          @db.VarChar(255)
   createAt     DateTime?       @default(now())
   User         User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
@@ -370,9 +370,12 @@ enum message_status_t {
 }
 
 enum notif_status_t {
-  Default
-  Warning
-  Success
+  default
+  warning
+  success
+  approve
+  reject
+  new
 }
 
 enum order_status_t {

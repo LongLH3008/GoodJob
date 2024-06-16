@@ -48,6 +48,7 @@ class User_ServiceUsing {
 
 	static async RegisCvService(user_id: UID, service_id: number) {
 		const service = await CV_Service.get(service_id);
+		if (!service) throw new API_Error("Cv Service not found", StatusCode.NOT_FOUND);
 		const { cv_service_expired } = service;
 		if (cv_service_expired) {
 			await prisma.user_ServiceUsing.create({
@@ -62,6 +63,7 @@ class User_ServiceUsing {
 
 	static async RegisRecrService(user_id: UID, service_id: number) {
 		const service = await Recr_Service.get(service_id);
+		if (!service) throw new API_Error("Recr Service not found", StatusCode.NOT_FOUND);
 		const { recr_service_expired } = service;
 		if (recr_service_expired) {
 			const expiredTime = this.expiredTime(recr_service_expired);

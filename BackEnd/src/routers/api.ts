@@ -6,6 +6,7 @@ import CVRouter from "./cv.routes";
 import CompanyRouter from "./company.routes";
 import RecruitmentRouter from "./recruitment.routes";
 import RecrInfoRouter from "./recr_info.routes";
+import NotificationRouter from "./notification.routes";
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.use("/", CVRouter);
 router.use("/", CompanyRouter);
 router.use("/", RecruitmentRouter);
 router.use("/", RecrInfoRouter);
+router.use("/", NotificationRouter);
 
 export default router;

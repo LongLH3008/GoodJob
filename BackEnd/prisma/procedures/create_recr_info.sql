@@ -26,7 +26,11 @@ BEGIN
     END IF;
 
     -- Query recruitment record
-    SELECT * INTO recr_record FROM "Recruitment" WHERE id = p_recr_id;
+    SELECT ri.* , u.id AS employer INTO recr_record
+    FROM "Recruitment" ri
+    LEFT JOIN "Company" c ON ri.company_id = c.id
+    LEFT JOIN "User" u ON c.employer_id = u.id
+    WHERE ri.id = p_recr_id;
 
     -- Throw error if recruitment record not found
     IF NOT FOUND THEN
@@ -53,6 +57,11 @@ BEGIN
         INSERT INTO "Recruitment_Information" (recr_id, cv_id)
         VALUES (p_recr_id, p_cv_id);
     END IF;
+
+    -- Send notification to Employer
+    INSERT INTO public."Notification"(
+	user_id, notif_status, content)
+	VALUES (recr_record.employer, 'new', 'Your recruitment has a new applicant');
 
 EXCEPTION
     WHEN others THEN

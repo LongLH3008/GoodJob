@@ -12,7 +12,14 @@ class RecrInfo {
 	}
 
 	static async get(recr_id: number) {
-		const recr_info = await prisma.recruitment_Information.findFirst({ where: { id: recr_id } });
+		const recr_info = await prisma.recruitment_Information.findFirst({
+			where: { id: recr_id },
+			include: {
+				CV: { select: { User: { select: { id: true } } } },
+				CV_import: { select: { User: { select: { id: true } } } },
+				Recruitment: { select: { Company: { select: { id: true } } } },
+			},
+		});
 		if (!recr_info) throw new API_Error("Cannot find recr info", StatusCode.NOT_FOUND);
 		return recr_info;
 	}
