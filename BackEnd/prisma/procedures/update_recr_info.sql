@@ -11,9 +11,19 @@ DECLARE
     employer_record RECORD;
     recr_id text;
     recr_list text[];
+	notif text;
+	status notif_status_t;
+	applicant text;
 BEGIN
     -- Query recruitment information record
-    SELECT * INTO recr_info_record FROM "Recruitment_Information" WHERE id = p_recr_info_id;
+    SELECT ri.*, u_cv.id AS user_cv, u_cvi.id AS user_cvi
+	INTO recr_info_record
+	FROM "Recruitment_Information" ri
+	LEFT JOIN "CV" cv ON ri.cv_id = cv.id
+	LEFT JOIN "User" u_cv ON cv.applicant_id = u_cv.id
+	LEFT JOIN "CV_import" cvi ON ri.file_id = cvi.id
+	LEFT JOIN "User" u_cvi ON cvi.applicant_id = u_cvi.id
+	WHERE ri.id = p_recr_info_id;
 
     -- Throw error if recruitment information record not found
     IF NOT FOUND THEN
@@ -21,7 +31,7 @@ BEGIN
     END IF;
 
     -- Query employer record
-    SELECT * INTO employer_record FROM "User" u
+    SELECT * , c.name AS company INTO employer_record FROM "User" u
     JOIN "Company" c ON u.id = c.employer_id
     JOIN "Recruitment" r ON c.id = r.company_id
     WHERE u.id = p_employer_id AND u.user_role = 'Employer';
@@ -46,6 +56,30 @@ BEGIN
     UPDATE "Recruitment_Information"
     SET recr_info_status = p_action
     WHERE id = p_recr_info_id;
+
+	-- Define Notification message
+	notif := CONCAT('Your Cv applied to ', employer_record.company,
+			CASE
+				WHEN p_action = 'approve' OR p_action = 'reject' THEN ' has been ' || p_action
+				ELSE ' has changed to ' || p_action
+			END);
+
+	-- Define Notification status
+	status := CASE  
+					WHEN p_action = 'approve' OR p_action = 'reject' THEN p_action
+					ELSE 'under review'
+				END;
+
+	applicant := CASE 
+					WHEN recr_info_record.user_cv IS NOT NULL THEN recr_info_record.user_cv
+					ELSE recr_info_record.user_cvi
+				 END;
+
+	-- Send Notification to applicant
+    INSERT INTO public."Notification"(
+	user_id, notif_status, content)
+	VALUES (applicant, status , notif);   
 END;
+
 
 $$;

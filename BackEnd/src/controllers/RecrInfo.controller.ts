@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import API_Response from "../utils/Api.response";
 import RecrInfo from "../services/RecrInfo.service";
-import { UID } from "../interfaces/User.interface";
 import { recr_info_status_t } from "@prisma/client";
 
 class RecrInfoController {
