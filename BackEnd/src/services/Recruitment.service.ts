@@ -1,12 +1,13 @@
-import prisma from "../../../prisma";
-import { StatusCode } from "../../enum/HttpStatus";
-import { UID } from "../../interfaces/User.interface";
-import { RecruitmentSchema } from "../../schemas/recruitment.schema";
-import { SchemaValidate } from "../../schemas/validate";
-import API_Error from "../../utils/Api.error";
-import { generateUUID } from "../../utils/GenerateUUID";
-import Company from "../Company/Company.service";
-import User from "../User/User.service";
+import prisma from "../../prisma";
+import { StatusCode } from "../enum/HttpStatus";
+import { UID } from "../interfaces/User.interface";
+import { RecruitmentSchema } from "../schemas/recruitment.schema";
+import { SchemaValidate } from "../schemas/validate";
+import API_Error from "../utils/Api.error";
+import { generateUUID } from "../utils/GenerateUUID";
+import { generateIOSTime, generateLocaleTime } from "../utils/Time";
+import Company from "./Company.service";
+import User from "./User.service";
 
 class Recruitment {
 	private static async checkCompany(
@@ -17,18 +18,18 @@ class Recruitment {
 		const employer = await User.get(employer_id);
 		if (employer.user_role !== "Employer")
 			throw new API_Error("Your account does not have permission", StatusCode.UNAUTHORIZED);
-		if (employer.User_Contact.length == 0 || employer.User_Information.length == 0)
+		if (!employer.User_Contact || !employer.User_Information)
 			throw new API_Error("You need to provide your information first", StatusCode.UNAUTHORIZED);
 		if (employer.check !== "1")
 			throw new API_Error("Your account is awaiting verification approval", StatusCode.UNAUTHORIZED);
 		const company = await Company.get(company_id);
 		if (company.check !== "1")
 			throw new API_Error("Your company is awaiting verification approval", StatusCode.UNAUTHORIZED);
-		const { Recruitment_Services } = employer.User_ServiceUsing[0];
-		if (Recruitment_Services) {
+		if (employer && employer.User_ServiceUsing?.Recruitment_Services) {
+			const { Recruitment_Services } = employer.User_ServiceUsing;
 			switch (action) {
 				case "create":
-					if (company.Recruitment.length + 1 > Recruitment_Services.totalRecr)
+					if (company.Recruitment.length + 1 > Recruitment_Services?.totalRecr)
 						throw new API_Error(
 							"Recruitment creations has reached the limit, Upgrade for more",
 							StatusCode.UNAUTHORIZED
@@ -36,7 +37,7 @@ class Recruitment {
 					break;
 				case "turnOnRecommended":
 					const recrRecommended = company.Recruitment.filter((item) => item.recommended == "1");
-					if (recrRecommended.length + 1 > Recruitment_Services.recommended)
+					if (recrRecommended.length + 1 > Recruitment_Services?.recommended)
 						throw new API_Error(
 							"Recruitment recommended has reached the limit, Upgrade for more",
 							StatusCode.UNAUTHORIZED
@@ -70,6 +71,9 @@ class Recruitment {
 			},
 		});
 		if (!recr) throw new API_Error("Recruitment not found", StatusCode.NOT_FOUND);
+		recr.createAt = generateLocaleTime(recr.createAt);
+		recr.updateAt = recr.updateAt == null ? null : generateLocaleTime(recr.updateAt);
+		recr.end = generateLocaleTime(recr.end);
 		return recr;
 	}
 
@@ -91,7 +95,7 @@ class Recruitment {
 		const isExsit = await prisma.recruitment.findFirst({ where: { company_id, job } });
 		if (isExsit) throw new API_Error("This recr already exists", StatusCode.UNAUTHORIZED);
 		return await prisma.recruitment.create({
-			data: { ...dt, id: generateUUID(), recr_status: "Recruiting" },
+			data: { ...dt, id: generateUUID(), recr_status: "Recruiting", end: generateIOSTime(dt.end) },
 		});
 	}
 
@@ -104,7 +108,7 @@ class Recruitment {
 		if (isExsit) throw new API_Error("This recr already exists", StatusCode.UNAUTHORIZED);
 		return await prisma.recruitment.update({
 			where: { id, company_id },
-			data: { ...dt },
+			data: { ...dt, updateAt: generateIOSTime(), end: generateIOSTime(dt.end) },
 		});
 	}
 

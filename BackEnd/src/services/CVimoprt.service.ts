@@ -1,11 +1,11 @@
-import prisma from "../../../prisma";
-import { StatusCode } from "../../enum/HttpStatus";
-import { UID } from "../../interfaces/User.interface";
-import { CVImportSchema } from "../../schemas/cv.schema";
-import { SchemaValidate } from "../../schemas/validate";
-import API_Error from "../../utils/Api.error";
-import { generateUUID } from "../../utils/GenerateUUID";
-import User from "../User/User.service";
+import prisma from "../../prisma";
+import { StatusCode } from "../enum/HttpStatus";
+import { UID } from "../interfaces/User.interface";
+import { CVImportSchema } from "../schemas/cv.schema";
+import { SchemaValidate } from "../schemas/validate";
+import API_Error from "../utils/Api.error";
+import { generateUUID } from "../utils/GenerateUUID";
+import User from "./User.service";
 import CV from "./CV.service";
 
 class CV_Import {

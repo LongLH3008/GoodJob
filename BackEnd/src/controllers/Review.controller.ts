@@ -1,6 +1,6 @@
 import { Request } from "express";
 import API_Response from "../utils/Api.response";
-import Review from "../services/Review/Review.service";
+import Review from "../services/Review.service";
 
 class ReviewController {
 	static async getAllReviews(req: Request, res: Response) {

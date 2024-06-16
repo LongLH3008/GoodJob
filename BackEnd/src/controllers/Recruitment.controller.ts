@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import API_Response from "../utils/Api.response";
-import Recruitment from "../services/Recruitment/Recruitment.service";
+import Recruitment from "../services/Recruitment.service";
 
 class RecruitmentController {
 	static async getAllRecruitments(req: Request, res: Response) {

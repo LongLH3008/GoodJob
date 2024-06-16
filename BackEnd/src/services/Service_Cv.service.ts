@@ -1,10 +1,11 @@
 import { notEqual } from "assert";
-import prisma from "../../../prisma";
-import { StatusCode } from "../../enum/HttpStatus";
-import { CV_ServiceSchema } from "../../schemas/user_service.schema";
-import { SchemaValidate } from "../../schemas/validate";
-import API_Error from "../../utils/Api.error";
-import { ICV_Service } from "../../interfaces/User_Service.interface";
+import prisma from "../../prisma";
+import { StatusCode } from "../enum/HttpStatus";
+import { CV_ServiceSchema } from "../schemas/user_service.schema";
+import { SchemaValidate } from "../schemas/validate";
+import API_Error from "../utils/Api.error";
+import { ICV_Service } from "../interfaces/User_Service.interface";
+import { generateIOSTime, generateLocaleTime } from "../utils/Time";
 
 class CV_Service {
 	static async getAll() {
@@ -16,6 +17,8 @@ class CV_Service {
 	static async get(id: any) {
 		const service = await prisma.cV_Services.findUnique({ where: { id: +id } });
 		if (!service) throw new API_Error("Service does not exist", StatusCode.NOT_FOUND);
+		service.createAt = generateLocaleTime(service.createAt);
+		service.updateAt = service.updateAt == null ? null : generateLocaleTime(service.updateAt);
 		return service;
 	}
 
@@ -61,6 +64,7 @@ class CV_Service {
 				describe,
 				recommended: +recommended,
 				totalCv,
+				updateAt: generateIOSTime(),
 			},
 		});
 	}

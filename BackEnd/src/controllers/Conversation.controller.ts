@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import API_Response from "../utils/Api.response";
-import Conversation from "../services/Conversation/Conversation.service";
-import Conversation_Messages from "../services/Conversation/Messages.service";
+import Conversation from "../services/Conversation.service";
+import Conversation_Messages from "../services/Conversation_Messages.service";
 
 class ConversationController {
 	static async getAllConversation(req: Request, res: Response) {
