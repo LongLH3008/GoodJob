@@ -2,10 +2,11 @@ import { Router } from "express";
 import UserController from "../controllers/User.controller";
 import { Async } from "../utils/AsyncHandle";
 import ServiceController from "../controllers/Service.controller";
+import { checkAuth } from "../utils/Authorization";
 
 const router = Router();
 
-router.get("/user", Async(UserController.getAllUser));
+router.get("/user", checkAuth(UserController.getAllUser, ["Applicant"]));
 router.get("/user/:id", Async(UserController.getUser));
 router.delete("/user/:id", Async(UserController.deleteUser));
 

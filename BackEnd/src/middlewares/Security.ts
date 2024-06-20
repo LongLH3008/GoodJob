@@ -16,8 +16,6 @@ class Security {
 		_express.use(lusca.xframe("SAMEORIGIN"));
 		_express.use(lusca.xssProtection(true));
 
-		// _express.use((req, res, next) => callback);
-
 		return _express;
 	}
 }
