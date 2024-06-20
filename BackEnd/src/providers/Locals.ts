@@ -13,6 +13,7 @@ class Locals {
 		const DATABASE_URL = `${process.env.DATABASE_URL}`;
 		const FE_URL = `${process.env.FE_URL}`;
 		const SECRET_KEY = `${process.env.SECRET_KEY}`;
+		const SECRET_COOKIE_TOKEN_KEY = `${process.env.SECRET_COOKIE_TOKEN_KEY}`;
 
 		return {
 			PORT,
@@ -23,6 +24,7 @@ class Locals {
 			SECRET_KEY,
 			CORS_ENABLED,
 			CHECK_TAXCODE,
+			SECRET_COOKIE_TOKEN_KEY,
 		};
 	}
 

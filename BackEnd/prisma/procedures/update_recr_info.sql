@@ -5,7 +5,6 @@ CREATE OR REPLACE PROCEDURE update_recruitment_information(
 )
 LANGUAGE plpgsql
 AS $$
-
 DECLARE
     recr_info_record RECORD;
     employer_record RECORD;
@@ -58,17 +57,20 @@ BEGIN
     WHERE id = p_recr_info_id;
 
 	-- Define Notification message
-	notif := CONCAT('Your Cv applied to ', employer_record.company,
+	notif := CONCAT(employer_record.company, ' company has',
 			CASE
-				WHEN p_action = 'approve' OR p_action = 'reject' THEN ' has been ' || p_action
-				ELSE ' has changed to ' || p_action
+				WHEN p_action = 'approve'  THEN ' approved your Cv'
+				WHEN p_action = 'reject'  THEN ' rejected your Cv'
+				ELSE ' changed your Cv status to ' || p_action
 			END);
 
 	-- Define Notification status
-	status := CASE  
-					WHEN p_action = 'approve' OR p_action = 'reject' THEN p_action
-					ELSE 'under review'
-				END;
+	status := CASE
+		            WHEN p_action = 'approve' THEN 'approve'
+		            WHEN p_action = 'reject' THEN 'reject'
+		            ELSE 'new'
+	          END;
+
 
 	applicant := CASE 
 					WHEN recr_info_record.user_cv IS NOT NULL THEN recr_info_record.user_cv

@@ -3,10 +3,10 @@ import cors from "cors";
 // import flash from "connect-flash";
 import helmet from "helmet";
 import compression from "compression";
+import cookieParser from "cookie-parser";
 
 class Http {
 	public static mount(_express: Application): Application {
-		_express.use(cors());
 		// _express.use(flash());
 		_express.use(helmet());
 		_express.use(compression());

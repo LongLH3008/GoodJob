@@ -13,7 +13,7 @@ class Middleware {
 
 		_express = Statics.mount(_express);
 
-		// _express = Security.mount(_express);
+		_express = Security.mount(_express);
 
 		return _express;
 	}
