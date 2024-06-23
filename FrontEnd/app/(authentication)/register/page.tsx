@@ -19,6 +19,11 @@ const RegisterPage = (props: Props) => {
 	const { toast } = useToast();
 	const form = useForm<IRegister>({
 		resolver: joiResolver(registerValidate),
+		defaultValues: {
+			email: "",
+			password: "",
+			confirmpassword: "",
+		},
 	});
 
 	async function onSubmit(data: IRegister) {

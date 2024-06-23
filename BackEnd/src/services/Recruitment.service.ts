@@ -15,18 +15,31 @@ class Recruitment {
 		company_id: UID,
 		action: "create" | "delete" | "update" | "turnOnRecommended"
 	) {
-		const employer = await User.get(employer_id);
+		// const employer = await User.get(employer_id);
+		const employer = await prisma.user.findFirst({
+			where: { id: employer_id },
+			select: {
+				user_role: true,
+				check: true,
+				User_Contact: { select: { id: true } },
+				User_Information: { select: { id: true } },
+				User_ServiceUsing: { select: { Recruitment_Services: true } },
+			},
+		});
+		if (!employer) throw new API_Error("User does not exist", StatusCode.NOT_FOUND);
 		if (employer.user_role !== "Employer")
 			throw new API_Error("Your account does not have permission", StatusCode.UNAUTHORIZED);
 		if (!employer.User_Contact || !employer.User_Information)
 			throw new API_Error("You need to provide your information first", StatusCode.UNAUTHORIZED);
 		if (employer.check !== "1")
 			throw new API_Error("Your account is awaiting verification approval", StatusCode.UNAUTHORIZED);
+
 		const company = await Company.get(company_id);
 		if (company.check !== "1")
 			throw new API_Error("Your company is awaiting verification approval", StatusCode.UNAUTHORIZED);
-		if (employer && employer.User_ServiceUsing?.Recruitment_Services) {
-			const { Recruitment_Services } = employer.User_ServiceUsing;
+
+		if (employer && employer.User_ServiceUsing[0].Recruitment_Services) {
+			const { Recruitment_Services } = employer.User_ServiceUsing[0];
 			switch (action) {
 				case "create":
 					if (company.Recruitment.length + 1 > Recruitment_Services?.totalRecr)

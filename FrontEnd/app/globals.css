@@ -27,6 +27,31 @@
 	body {
 		@apply bg-background text-foreground;
 	}
+
+	.res_layout {
+		@apply px-48;
+	}
+
+	.hover_navbtn {
+		@apply hover:bg-gradient-to-br from-zinc-950 to-zinc-700;
+	}
+
+	.hover_navlink {
+		@apply hover:bg-gradient-to-br from-orange-600 to-amber-400;
+	}
+
+	@keyframes hide {
+		from {
+			width: fit-content;
+		}
+		to {
+			width: 0;
+		}
+	}
+}
+
+.a {
+	text-shadow: 0 0 5px #000000;
 }
 
 @layer base {

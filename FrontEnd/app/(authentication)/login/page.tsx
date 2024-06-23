@@ -14,6 +14,10 @@ const LoginPage = () => {
 	const { toast } = useToast();
 	const form = useForm<ILogin>({
 		resolver: joiResolver(loginValidate),
+		defaultValues: {
+			email: "",
+			password: "",
+		},
 	});
 
 	async function onSubmit(dt: ILogin) {

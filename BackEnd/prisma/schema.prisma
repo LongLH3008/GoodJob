@@ -206,8 +206,6 @@ model Recruitment {
   id                      String                    @id
   company_id              String
   job                     String                    @db.VarChar(14)
-  position                String                    @default("Employee") @db.VarChar(14)
-  exp                     Int
   salary                  String                    @db.VarChar(30)
   benefits                String?                   @db.VarChar(300)
   describe                String?                   @db.VarChar(300)
@@ -218,6 +216,9 @@ model Recruitment {
   updateAt                DateTime?
   recommended             String?                   @default("0") @db.Bit(1)
   work_format             recr_format_t?            @default(FullTime)
+  profession              String
+  position                recr_position_t           @default(Employee)
+  exp                     String
   Company                 Company                   @relation(fields: [company_id], references: [id], onDelete: Cascade)
   Recruitment_Information Recruitment_Information[]
 
@@ -391,7 +392,7 @@ enum recr_format_t {
   Freelance
   Contract
   Temporary
-  Internship
+  Other
 }
 
 enum recr_info_status_t {
@@ -448,4 +449,14 @@ enum vote_t {
   Average
   Good
   Very_Good @map("Very Good")
+}
+
+enum recr_position_t {
+  Employee
+  Leader
+  Monitoring
+  Manager
+  Director
+  Intern
+  Other
 }

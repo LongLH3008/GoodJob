@@ -28,38 +28,13 @@ class User {
 		if (!user) throw new API_Error("User does not exist", StatusCode.NOT_FOUND);
 		user.createAt = generateLocaleTime(user.createAt);
 		user.updateAt = user.updateAt == null ? null : generateLocaleTime(user.updateAt);
-		const [
-			User_Contact,
-			User_Information,
-			User_Social,
-			Conversation,
-			Notification,
-			Order,
-			User_ServiceUsing,
-			CV,
-			CV_import,
-			Reviews,
-			Company,
-		] = await prisma.$transaction([
+		const [User_Contact, User_Information, User_Social, User_ServiceUsing] = await prisma.$transaction([
 			prisma.user_Contact.findFirst({ where: { user_id: id } }),
 			prisma.user_Information.findFirst({ where: { user_id: id } }),
 			prisma.user_Social.findMany({ where: { user_id: id } }),
-			prisma.conversation.findMany({
-				where: { starter_userid: id },
-				include: { Conversation_Messages: true },
-			}),
-			prisma.notification.findMany({ where: { user_id: id } }),
-			prisma.order.findMany({ where: { user_id: id } }),
 			prisma.user_ServiceUsing.findFirst({
 				where: { user_id: id },
 				include: { CV_Services: true, Recruitment_Services: true },
-			}),
-			prisma.cV.findMany({ where: { applicant_id: id } }),
-			prisma.cV_import.findMany({ where: { applicant_id: id } }),
-			prisma.reviews.findMany({ where: { applicant_id: id } }),
-			prisma.company.findFirst({
-				where: { employer_id: id },
-				include: { Recruitment: true, Reviews: true },
 			}),
 		]);
 		return {
@@ -67,14 +42,7 @@ class User {
 			User_Contact,
 			User_Information,
 			User_Social,
-			Conversation,
-			Notification,
-			Order,
 			User_ServiceUsing,
-			CV,
-			CV_import,
-			Reviews,
-			Company,
 		};
 	}
 

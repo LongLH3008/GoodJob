@@ -15,18 +15,30 @@ import CV_Skills from "./CVSkill.service";
 
 class CV {
 	static async checkApplicant(applicant_id: UID, action: "update" | "create" | "turnOnRecommended" | "delete") {
-		const applicant = await User.get(applicant_id);
+		const applicant = await prisma.user.findFirst({
+			where: { id: applicant_id },
+			select: {
+				user_role: true,
+				check: true,
+				User_Contact: { select: { id: true } },
+				User_Information: { select: { id: true } },
+				User_ServiceUsing: { select: { CV_Services: true } },
+				CV: true,
+				CV_import: true,
+			},
+		});
+
+		if (!applicant) throw new API_Error("User does not exists", StatusCode.NOT_FOUND);
 		if (applicant.user_role !== "Applicant")
 			throw new API_Error("Your account does not have permission", StatusCode.UNAUTHORIZED);
-		if (!applicant.User_Contact || !applicant.User_Information) {
+		if (!applicant.User_Contact.length || !applicant.User_Information.length)
 			throw new API_Error("You need to provide your information first", StatusCode.UNAUTHORIZED);
-		}
-		if (applicant.check !== "1") {
+		if (applicant.check !== "1")
 			throw new API_Error("Your account is awaiting verification approval", StatusCode.UNAUTHORIZED);
-		}
+
 		const { CV, CV_import } = applicant;
-		if (applicant && applicant.User_ServiceUsing?.CV_Services) {
-			const { CV_Services } = applicant.User_ServiceUsing;
+		if (applicant && applicant.User_ServiceUsing[0].CV_Services) {
+			const { CV_Services } = applicant.User_ServiceUsing[0];
 			const cv = CV.filter((item) => item.recommended == "1");
 			switch (action) {
 				case "create":
