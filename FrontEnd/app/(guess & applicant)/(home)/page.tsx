@@ -1,9 +1,15 @@
+import HomeBanner from "@/components/pages/home_banner";
 import React from "react";
 
 type Props = {};
 
 const HomePage = (props: Props) => {
-	return <div>HomePage</div>;
+	return (
+		<>
+			<HomeBanner />
+			<div className="res_layout">HomePage</div>
+		</>
+	);
 };
 
 export default HomePage;

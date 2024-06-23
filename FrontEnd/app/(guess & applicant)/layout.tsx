@@ -1,4 +1,6 @@
+import Footer from "@/components/reuse/footer";
 import Navbar from "@/components/reuse/navbar";
+import ScrollToTop from "@/components/reuse/scrolltotop";
 import { Metadata } from "next";
 import React, { ReactNode } from "react";
 
@@ -15,10 +17,12 @@ export const metadata: Metadata = {
 
 const ApplicantAndGuessLayout = ({ children }: { children: ReactNode }) => {
 	return (
-		<>
+		<div className="relative">
 			<Navbar />
-			<div className="px-48">{children}</div>
-		</>
+			<div className="pb-[250px]">{children}</div>
+			<Footer />
+			<ScrollToTop />
+		</div>
 	);
 };
 
