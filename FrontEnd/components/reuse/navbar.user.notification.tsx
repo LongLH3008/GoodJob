@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "../ui/scroll-area";
 
-const Item = ({
+const ItemNotification = ({
 	isNew,
 	className,
 	title,
@@ -64,7 +64,7 @@ export function Notification() {
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
 					<ScrollArea className="h-72 w-full">
-						<Item
+						<ItemNotification
 							isNew
 							title="ccc"
 							content="Message for you fkaewfgajfhfuhafouahwfoihfoaifhao
@@ -72,14 +72,14 @@ export function Notification() {
 							time="2024-06-21T05:14:32.914Z"
 							status="warning"
 						/>
-						<Item
+						<ItemNotification
 							title="ccc"
 							content="Message for you fkaewfgajfhfuhafouahwfoihfoaifhao
 								uewfhuofawofawhfufboewufuhw uafhahofbwfiebububuo"
 							time="2024-06-21T05:14:32.914Z"
 							status="reject"
 						/>
-						<Item
+						<ItemNotification
 							title="ccc"
 							content="Message for you fkaewfgajfhfuhafouahwfoihfoaifhao
 								uewfhuofawofawhfufboewufuhw uafhahofbwfiebububuo"

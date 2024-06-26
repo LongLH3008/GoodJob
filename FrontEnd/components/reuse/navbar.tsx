@@ -1,29 +1,30 @@
 import Image from "next/image";
-import StickyNavbar from "./navbar_sticky";
+import StickyNavbar from "./navbar.sticky";
 import Link from "next/link";
-import { MessagesSquare, PackagePlus, Search } from "lucide-react";
-import { UserControl } from "./navbar_usercontrol";
-import { Notification } from "./navbar_notification";
-import { ButtonSearch, NavSearch } from "./navbar_search";
+import { ButtonSearch, NavSearch } from "./navbar.search";
+import { UserControl } from "./navbar.user";
+import { UserlControlResponsive } from "./navbar.user.responsive";
+import { NotificationResponsive } from "./navbar.user.notification.responsive";
+import { MessagesSquare } from "lucide-react";
 
 const Navbar = () => {
 	return (
 		<>
-			<div className="bg-gradient-to-br z-50 relative from-orange-400 text-white to-amber-400 w-full h-5 text-right px-48 text-[12px] justify-end flex items-center">
+			<div className="res_layout bg-gradient-to-br z-50 relative from-orange-400 text-white to-amber-400 w-full h-5 text-right text-[12px] justify-end flex items-center">
 				GoodJob - Copy right 2024 &copy; LongLH
 			</div>
 			<StickyNavbar className="">
-				<div className="px-48 w-full h-full relative leading-[100%] grid grid-cols-5">
+				<div className="res_layout w-full h-full relative leading-[100%] flex justify-between items-center lg:grid lg:grid-cols-5">
 					<Link href={"/"} className="w-3/5 col-span-1 cursor-pointer flex items-center">
 						<Image
 							src={"/logo.svg"}
 							width={100}
 							height={100}
-							className="w-full"
+							className="w-[45%] sm:w-[35%] lg:w-full"
 							alt="goodjob"
 						/>
 					</Link>
-					<div className="col-span-3 flex justify-center items-center gap-2">
+					<div className="max-lg:hidden col-span-3 flex justify-center items-center gap-2">
 						<Link href={"/job"} className="hover_navlink hover:text-white rounded-md p-3 px-10">
 							Jobs
 						</Link>
@@ -40,15 +41,13 @@ const Navbar = () => {
 							Contact
 						</Link>
 					</div>
-					<div className="col-span-1 flex justify-between items-center gap-3">
+					<div className="col-span-1 flex justify-between items-center gap-3 max-lg:hidden">
 						<ButtonSearch />
-						<Link
-							href="cv-services"
-							className="p-2 bg-transparent rounded-md text-primary hover:text-white hover_navbtn hover:border-primary"
-						>
-							<PackagePlus strokeWidth={1.25} />
-						</Link>
-						<Notification />
+						<UserControl />
+					</div>
+					<div className="col-span-1 hidden justify-between items-center gap-3 max-lg:flex">
+						<ButtonSearch />
+						<NotificationResponsive />
 						<Link
 							href="cv-services"
 							className="p-2 relative bg-transparent rounded-md text-primary hover:text-white hover:bg-primary hover_navbtn"
@@ -59,13 +58,7 @@ const Navbar = () => {
 							</span>
 							<MessagesSquare strokeWidth={1.25} />
 						</Link>
-						{/* <Link
-							href={"/login"}
-							className="ml-3 p-[10px] text-sm bg-transparent rounded-md text-primary hover:text-white hover:bg-primary hover_navbtn"
-						>
-							Login / Register
-						</Link> */}
-						<UserControl />
+						<UserlControlResponsive />
 					</div>
 				</div>
 			</StickyNavbar>

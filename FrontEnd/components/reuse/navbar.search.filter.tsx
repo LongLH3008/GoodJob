@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { Check, ChevronsUpDown, CirclePlus } from "lucide-react";
 import { ScrollArea } from "../ui/scroll-area";
-import { NavbarSearchState, Search } from "@/lib/state/navbar_search.ui";
+import { NavbarSearchState, Search } from "@/lib/hooks/navbar_search.ui";
 
 const FilterSelect = ({
 	data,
@@ -31,8 +31,8 @@ const FilterSelect = ({
 					aria-expanded={open}
 					className={cn(`justify-between border-zinc-400 capitalize ${className}`)}
 				>
-					<div className="flex gap-5 items-center">
-						<CirclePlus className="text-zinc-500" strokeWidth={1.25} />
+					<div className="flex max-lg:gap-3 gap-5 max-md:text-[13px] items-center overflow-hidden">
+						<CirclePlus className="text-zinc-500 max-sm:hidden" strokeWidth={1.25} />
 						{label} :{" "}
 						{search.dataFilter[`${keyFilter}`] !== ""
 							? search.dataFilter[`${keyFilter}`]
@@ -54,6 +54,7 @@ const FilterSelect = ({
 										search.setFilter(keyFilter, "");
 										setOpen(false);
 									}}
+									className="overflow-hidden"
 								>
 									<Check
 										className={cn(
@@ -73,7 +74,7 @@ const FilterSelect = ({
 											search.setFilter(keyFilter, item);
 											setOpen(false);
 										}}
-										className="capitalize"
+										className="capitalize overflow-hidden"
 									>
 										<Check
 											className={cn(

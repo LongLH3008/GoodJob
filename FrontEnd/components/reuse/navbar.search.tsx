@@ -3,9 +3,9 @@
 import React from "react";
 import { Button } from "../ui/button";
 import { RotateCcw, Search, X } from "lucide-react";
-import { NavbarSearchState } from "@/lib/state/navbar_search.ui";
-import { ScrollVerticalState } from "@/lib/state/scroll_vertical.ui";
-import FilterSelect from "./navbar_search.filter";
+import { NavbarSearchState } from "@/lib/hooks/navbar_search.ui";
+import { ScrollVerticalState } from "@/lib/hooks/scroll_vertical.ui";
+import FilterSelect from "./navbar.search.filter";
 import { Input } from "../ui/input";
 import * as constanst from "@/lib/constants";
 
@@ -30,16 +30,16 @@ export const NavSearch = (props: Props) => {
 	return (
 		<div
 			className={`border
-			${scroll < 5 && "pt-[7%]"}
+			${scroll < 5 && "pt-[7%] max-lg:pt-[10%]"}
 			${search.isOpen ? "opacity-1 z-10 top-0" : "-z-10 opacity-0 -top-1/2"}
-			res_layout pt-[5%] h-fit fixed transition-all ease-in-out duration-500 w-full bg-white rounded-br-3xl rounded-bl-3xl border-b shadow-2xl`}
+			res_layout pt-[5%] max-sm:pt-[15%] max-lg:pt-[10%] h-fit fixed transition-all ease-in-out duration-500 w-full bg-white rounded-br-3xl rounded-bl-3xl border-b shadow-2xl`}
 		>
 			<div className="flex flex-col gap-3 pb-32 relative w-full">
-				<p className="text-2xl my-5 text-center">Find your job</p>
-				<div className="grid grid-cols-4 gap-3">
+				<p className="text-2xl my-5 text-center max-md:text-lg">Find your job</p>
+				<div className="grid grid-cols-4 gap-3 max-lg:text-sm max-lg:grid-cols-3 max-sm:grid-cols-2">
 					<Input
 						onChange={(e) => search.setFilter("job", e.target.value)}
-						className="col-span-2"
+						className="max-sm:col-span-2 max-lg:col-span-3 col-span-2"
 						type="text"
 						value={search.dataFilter.job}
 						placeholder="Type your favorite Job here"

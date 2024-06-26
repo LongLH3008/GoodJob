@@ -1,5 +1,5 @@
 "use client";
-import { ScrollVerticalState } from "@/lib/state/scroll_vertical.ui";
+import { ScrollVerticalState } from "@/lib/hooks/scroll_vertical.ui";
 import { ChevronUp } from "lucide-react";
 
 const ScrollToTop = () => {
