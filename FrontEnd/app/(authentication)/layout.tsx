@@ -1,4 +1,4 @@
-import AuthCarousel from "@/components/pages/auth_carousel";
+import AuthCarousel from "@/app/(authentication)/carousel";
 import Image from "next/image";
 import React, { ReactNode } from "react";
 

@@ -1,7 +1,7 @@
 "use client";
 
-import { NavbarSearchState } from "@/lib/state/navbar_search.ui";
-import { ScrollVerticalState } from "@/lib/state/scroll_vertical.ui";
+import { NavbarSearchState } from "@/lib/hooks/navbar_search.ui";
+import { ScrollVerticalState } from "@/lib/hooks/scroll_vertical.ui";
 import React, { ReactNode, useEffect, useState } from "react";
 
 const StickNavbar = ({ children, className }: { children: ReactNode; className: string }) => {

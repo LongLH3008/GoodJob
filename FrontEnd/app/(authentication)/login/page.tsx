@@ -9,9 +9,16 @@ import Link from "next/link";
 import { loginValidate } from "@/lib/schemas";
 import { instance } from "@/lib/api/api";
 import { KeyRound, Lock, LockOpen, Unplug, UserRound, X } from "lucide-react";
+import { useState } from "react";
+import PulseLoader from "react-spinners/PulseLoader";
+import { useRouter } from "next/navigation";
+import { checkLogin } from "@/lib/hooks/user";
 
 const LoginPage = () => {
 	const { toast } = useToast();
+	const [isSubmit, setIsSubmit] = useState<boolean>(false);
+	const router = useRouter();
+
 	const form = useForm<ILogin>({
 		resolver: joiResolver(loginValidate),
 		defaultValues: {
@@ -21,9 +28,11 @@ const LoginPage = () => {
 	});
 
 	async function onSubmit(dt: ILogin) {
-		console.log(dt);
+		setIsSubmit(true);
+		setTimeout(() => setIsSubmit(false), 1500);
 		try {
 			const { data } = await instance.post("/auth/login", dt);
+			await checkLogin();
 			toast({
 				variant: "success",
 				title: `${data.message}`,
@@ -31,6 +40,7 @@ const LoginPage = () => {
 				action: <LockOpen color="#ff9c00" />,
 				duration: 5000,
 			});
+			router.replace("/");
 		} catch (error: any) {
 			toast({
 				variant: "destructive",
@@ -124,8 +134,8 @@ const LoginPage = () => {
 										</FormItem>
 									)}
 								/>
-								<Button type="submit" className="mt-2">
-									Login
+								<Button disabled={isSubmit} type="submit" className="mt-2">
+									{isSubmit ? <PulseLoader color="#000000" /> : "Login"}
 								</Button>
 							</form>
 						</Form>
