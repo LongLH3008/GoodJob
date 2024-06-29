@@ -20,7 +20,7 @@ class User {
 	}
 
 	static async get(id: UID) {
-		const user = await prisma.user.findUnique({
+		const user = await prisma.user.findFirst({
 			where: {
 				id,
 			},
@@ -85,8 +85,7 @@ class User {
 	}
 
 	static async delete(id: UID) {
-		const user = this.get(id);
-		if (!user) throw new API_Error("User not found", StatusCode.NOT_FOUND);
+		await this.get(id);
 		const removeUser = await prisma.user.delete({ where: { id } });
 		return removeUser;
 	}

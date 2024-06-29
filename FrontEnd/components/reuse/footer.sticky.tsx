@@ -10,7 +10,7 @@ const StickyFooter = ({ children, className }: { children: ReactNode; className:
 			<div
 				className={`
 				${
-					scrollHeight > 0 && scroll >= scrollHeight * 0.95
+					scrollHeight > 0 && scroll >= scrollHeight * 0.98
 						? "opacity-1 -bottom-28 z-10"
 						: "duration-0 opacity-0 -bottom-full -z-10"
 				} 
@@ -19,7 +19,7 @@ const StickyFooter = ({ children, className }: { children: ReactNode; className:
 			<div
 				className={`
 				${
-					scrollHeight > 0 && scroll >= scrollHeight * 0.95
+					scrollHeight > 0 && scroll >= scrollHeight * 0.98
 						? "opacity-1 -bottom-32 z-10"
 						: "duration-0 opacity-0 -bottom-full -z-10"
 				} 
@@ -27,7 +27,7 @@ const StickyFooter = ({ children, className }: { children: ReactNode; className:
 			></div>
 			<div
 				className={`
-				${scrollHeight > 0 && scroll > scrollHeight * 0.95 ? "opacity-1 z-20 bottom-0" : "opacity-0 -bottom-full -z-10"}
+				${scrollHeight > 0 && scroll > scrollHeight * 0.98 ? "opacity-1 z-20 bottom-0" : "opacity-0 -bottom-full -z-10"}
 				 transition-all duration-1000 fixed bg-[rgba(0,0,0,0.85)] scale-110 rounded-tl-[75%] pt-20 pb-10 rounded-tr-[75%] w-full text-white
 				 ${className}`}
 			>

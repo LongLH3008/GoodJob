@@ -102,3 +102,81 @@ export const location = [
 ];
 
 export const exp = ["None", "Above 6 Month", "1 ~ 2 Year", "2 ~ 3 Year", "3 ~ 5 Year", "Other"];
+
+export const homereviews = [
+	{
+		name: "John Smith",
+		review: "GoodJob is a very helpful website. I found my dream job within a week of using it.",
+		avatar: "https://randomuser.me/api/portraits/men/1.jpg",
+	},
+	{
+		name: "Emily Johnson",
+		review: "The interface of GoodJob is very user-friendly and easy to navigate.",
+		avatar: "https://randomuser.me/api/portraits/women/1.jpg",
+	},
+	{
+		name: "Michael Brown",
+		review: "This website offers a diverse range of job opportunities.",
+		avatar: "https://randomuser.me/api/portraits/men/2.jpg",
+	},
+	{
+		name: "Jessica Davis",
+		review: "GoodJob truly excels at connecting employers with job seekers. I am very satisfied with their service.",
+		avatar: "https://randomuser.me/api/portraits/women/2.jpg",
+	},
+	{
+		name: "David Wilson",
+		review: "I love how GoodJob suggests suitable jobs based on my profile. Very convenient and accurate.",
+		avatar: "https://randomuser.me/api/portraits/men/3.jpg",
+	},
+	{
+		name: "Sarah Miller",
+		review: "Thanks to GoodJob, I found a job that suits me with a good salary. Thank you very much, GoodJob!",
+		avatar: "https://randomuser.me/api/portraits/women/3.jpg",
+	},
+	{
+		name: "James Martinez",
+		review: "The registration and application process is very simple and fast.",
+		avatar: "https://randomuser.me/api/portraits/men/4.jpg",
+	},
+	{
+		name: "Jennifer Taylor",
+		review: "I appreciate the detailed and clear information GoodJob provides about each job.",
+		avatar: "https://randomuser.me/api/portraits/women/4.jpg",
+	},
+	{
+		name: "Christopher Anderson",
+		review: "GoodJob has a great search filter, which helps me quickly find jobs that match my needs.",
+		avatar: "https://randomuser.me/api/portraits/men/5.jpg",
+	},
+	{
+		name: "Amanda Thomas",
+		review: "The website always updates the latest job postings, so I never miss an opportunity.",
+		avatar: "https://randomuser.me/api/portraits/women/5.jpg",
+	},
+	{
+		name: "Matthew Jackson",
+		review: "I am very impressed with GoodJob's customer support. They are always ready to help and answer all my questions.",
+		avatar: "https://randomuser.me/api/portraits/men/6.jpg",
+	},
+	{
+		name: "Ashley White",
+		review: "GoodJob helped me find a part-time job that fits my school schedule. Thank you so much for this great site!",
+		avatar: "https://randomuser.me/api/portraits/women/6.jpg",
+	},
+	{
+		name: "Joshua Harris",
+		review: "The process of creating a profile on GoodJob is very simple and easy. I could complete it in a few minutes.",
+		avatar: "https://randomuser.me/api/portraits/men/7.jpg",
+	},
+	{
+		name: "Elizabeth Martin",
+		review: "GoodJob features many jobs from reputable companies. I feel very secure applying through this website.",
+		avatar: "https://randomuser.me/api/portraits/women/7.jpg",
+	},
+	{
+		name: "Daniel Lee",
+		review: "Thanks to GoodJob, I found my first job right after graduating. I am very grateful for that.",
+		avatar: "https://randomuser.me/api/portraits/men/8.jpg",
+	},
+];

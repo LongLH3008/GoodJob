@@ -19,7 +19,7 @@ const ApplicantAndGuessLayout = ({ children }: { children: ReactNode }) => {
 	return (
 		<div className="relative">
 			<Navbar />
-			<div className="pb-[250px]">{children}</div>
+			<div className="lg:pb-[250px]">{children}</div>
 			<Footer />
 			<ScrollToTop />
 		</div>

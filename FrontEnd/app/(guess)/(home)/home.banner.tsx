@@ -8,12 +8,12 @@ const HomeBanner = (props: Props) => {
 	return (
 		<div
 			style={{ backgroundImage: "url('/banner_bg.png')" }}
-			className="res_layout h-[87dvh] bg-cover bg-fixed flex items-center justify-between py-5"
+			className="res_layout h-[87dvh] bg-cover bg-fixed flex items-center justify-between py-10 lg:py-5"
 		>
 			<div className="flex flex-col max-lg:items-center max-lg:w-full gap-10 rounded-xl">
 				<div
 					style={{ textShadow: "0 2px 2px rgba(0, 0, 0, 0.5)" }}
-					className="uppercase max-sm:text-center max-lg:text-4xl text-5xl 2xl:text-6xl text-primary font-light"
+					className="uppercase max-sm:text-center text-3xl 2xl:text-4xl text-primary font-light"
 				>
 					CONNECTING <span className="text-primary font-medium">APPLICANTS</span> <br /> WITH{" "}
 					<span className="text-primary font-medium">EMPLOYERS</span>
@@ -26,13 +26,13 @@ const HomeBanner = (props: Props) => {
 						alt="goodjob"
 						className="-translate-y-1/2"
 					/>
-					<blockquote className="text-primary leading-5 max-lg:text-[11px] font-medium p-3 px-5 w-fit bg-white rounded-2xl rounded-tl-none">
+					<blockquote className="text-primary lg:leading-5 max-lg:text-[11px] text-sm p-3 px-5 w-fit bg-white rounded-2xl rounded-tl-none">
 						"APPLY FOR YOUR DREAM JOB <br />
 						FIND POTENTIAL APPLICANTS FOR YOUR COMPANY <br />
 						Let GoodJob help you !"
 					</blockquote>
 				</div>
-				<Button className="w-1/3 py-8 rounded-md hover_navbtn max-md:px-24 max-lg:text-sm text-xl">
+				<Button className="w-1/3 py-8 rounded-md hover_navbtn max-md:px-24 max-lg:text-sm text-lg">
 					Discover Now
 				</Button>
 			</div>

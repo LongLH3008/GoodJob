@@ -32,12 +32,12 @@ const ItemNotification = ({
 			className={`relative pb-5 flex items-start justify-between gap-5 px-5 
 			${isNew && "bg-zinc-200"} ${className}`}
 		>
-			{status == "approve" && <ClipboardCheck />}
-			{status == "reject" && <ClipboardX />}
-			{status == "success" && <CircleCheckBig />}
-			{status == "warning" && <CircleAlert />}
-			{status == "new" && <Mail />}
-			{status == "default" && <Mail />}
+			{status == "approve" && <ClipboardCheck strokeWidth={1.25} color="#ff9c00" />}
+			{status == "reject" && <ClipboardX strokeWidth={1.25} color="red" />}
+			{status == "success" && <CircleCheckBig strokeWidth={1.25} color="#ff9c00" />}
+			{status == "warning" && <CircleAlert strokeWidth={1.25} color="red" />}
+			{status == "new" && <Mail strokeWidth={1.25} />}
+			{status == "default" && <Mail strokeWidth={1.25} />}
 			<p className="text-wrap w-full text-[12.5px]">
 				<strong>{title} </strong>
 				{content}
