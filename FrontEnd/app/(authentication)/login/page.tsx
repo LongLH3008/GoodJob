@@ -7,17 +7,43 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import { loginValidate } from "@/lib/schemas";
-import { instance } from "@/lib/api/api";
 import { KeyRound, Lock, LockOpen, Unplug, UserRound, X } from "lucide-react";
 import { useState } from "react";
 import PulseLoader from "react-spinners/PulseLoader";
 import { useRouter } from "next/navigation";
-import { checkLogin } from "@/lib/hooks/user";
+import useSWRMutation from "swr/mutation";
+import { SwrExecute } from "@/lib/hooks/swr";
 
 const LoginPage = () => {
 	const { toast } = useToast();
 	const [isSubmit, setIsSubmit] = useState<boolean>(false);
 	const router = useRouter();
+
+	const { trigger } = useSWRMutation("/auth/login", SwrExecute, {
+		onSuccess: (data) => {
+			toast({
+				title: `${data.message}`,
+				description: `Welcome ${data.metadata.user.split("@")[0]}`,
+				action: <LockOpen strokeWidth={1.25} color="#ff9c00" />,
+				duration: 5000,
+			});
+			router.push("/");
+		},
+		onError: (error) => {
+			toast({
+				title: "Login failed",
+				description: error.response
+					? error.response.data
+					: "Could not connect to server. Please try again later",
+				duration: 3500,
+				action: error.response ? (
+					<Lock strokeWidth={1.25} className="text-red-500" />
+				) : (
+					<Unplug strokeWidth={1.25} className="text-red-500" />
+				),
+			});
+		},
+	});
 
 	const form = useForm<ILogin>({
 		resolver: joiResolver(loginValidate),
@@ -28,34 +54,9 @@ const LoginPage = () => {
 	});
 
 	async function onSubmit(dt: ILogin) {
+		await trigger({ method: "POST", formdata: dt });
 		setIsSubmit(true);
 		setTimeout(() => setIsSubmit(false), 1500);
-		try {
-			const { data } = await instance.post("/auth/login", dt);
-			await checkLogin();
-			toast({
-				variant: "success",
-				title: `${data.message}`,
-				description: `Welcome ${data.metadata.user.split("@")[0]}`,
-				action: <LockOpen color="#ff9c00" />,
-				duration: 5000,
-			});
-			router.replace("/");
-		} catch (error: any) {
-			toast({
-				variant: "destructive",
-				title: "Login failed",
-				description: error.response
-					? error.response.data
-					: "Could not connect to server. Please try again later",
-				duration: 3500,
-				action: error.response ? (
-					<Lock className="text-red-500" />
-				) : (
-					<Unplug className="text-red-500" />
-				),
-			});
-		}
 	}
 
 	return (
@@ -87,7 +88,10 @@ const LoginPage = () => {
 														"text-red-500 validate_fail"
 													}`}
 												>
-													<UserRound className="absolute left-3 h-full" />
+													<UserRound
+														strokeWidth={1}
+														className="absolute left-3 h-full"
+													/>
 													<Input
 														type="text"
 														className={`w-full pl-12 ${
@@ -117,7 +121,10 @@ const LoginPage = () => {
 														"text-red-500 validate_fail"
 													}`}
 												>
-													<KeyRound className="absolute left-3 h-full" />
+													<KeyRound
+														strokeWidth={1}
+														className="absolute left-3 h-full"
+													/>
 													<Input
 														type="password"
 														className={`w-full pl-12 ${

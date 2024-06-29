@@ -34,10 +34,10 @@ const ItemNotification = ({
 			className={`relative p-2 pb-5 flex items-start justify-between gap-5
 			${isNew && "bg-zinc-100"} ${className}`}
 		>
-			{status == "approve" && <ClipboardCheck strokeWidth={1.25} className="w-8 h-8" />}
-			{status == "reject" && <ClipboardX strokeWidth={1.25} className="w-8 h-8" />}
-			{status == "success" && <CircleCheckBig strokeWidth={1.25} className="w-8 h-8" />}
-			{status == "warning" && <CircleAlert strokeWidth={1.25} className="w-8 h-8" />}
+			{status == "approve" && <ClipboardCheck strokeWidth={1.25} className="w-8 h-8" color="#ff9c00" />}
+			{status == "reject" && <ClipboardX strokeWidth={1.25} className="w-8 h-8" color="red" />}
+			{status == "success" && <CircleCheckBig strokeWidth={1.25} className="w-8 h-8" color="#ff9c00" />}
+			{status == "warning" && <CircleAlert strokeWidth={1.25} className="w-8 h-8" color="red" />}
 			{status == "new" && <Mail strokeWidth={1.25} className="w-8 h-8" />}
 			{status == "default" && <Mail strokeWidth={1.25} className="w-8 h-8" />}
 			<p className="text-wrap w-full text-[12.5px]">

@@ -1,7 +1,11 @@
+"use client";
 import HomeApplicant from "@/app/(guess)/(home)/home.applicants";
 import HomeBanner from "@/app/(guess)/(home)/home.banner";
 import HomeProfessionCategory from "@/app/(guess)/(home)/home.professionlist";
-import React from "react";
+import HomeSubscribe from "./home.subcribe";
+import HomeIntroduce from "./home.introduce";
+import { HomeReview } from "./home.review";
+import HomeEmployer from "./home.employer";
 
 type Props = {};
 
@@ -9,9 +13,12 @@ const HomePage = (props: Props) => {
 	return (
 		<>
 			<HomeBanner />
-			<HomeProfessionCategory />
+			<HomeIntroduce />
 			<HomeApplicant />
-			<div className="res_layout">HomePage</div>
+			<HomeEmployer />
+			<HomeProfessionCategory />
+			<HomeReview />
+			<HomeSubscribe />
 		</>
 	);
 };

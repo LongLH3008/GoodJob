@@ -261,7 +261,7 @@ function Footer() {
 						</li>
 					</ul>
 				</div>
-				<div className="text-[10px] flex gap-3 items-center mt-5">
+				<div className="text-[10px] flex gap-3 items-center mt-5 max-sm:self-start">
 					Made from{" "}
 					<a className="flex items-center gap-2" target="_blank" href="https://nextjs.org/">
 						<Image

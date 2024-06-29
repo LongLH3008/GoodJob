@@ -4,8 +4,6 @@ import Link from "next/link";
 import { ButtonSearch, NavSearch } from "./navbar.search";
 import { UserControl } from "./navbar.user";
 import { UserlControlResponsive } from "./navbar.user.responsive";
-import { NotificationResponsive } from "./navbar.user.notification.responsive";
-import { MessagesSquare } from "lucide-react";
 
 const Navbar = () => {
 	return (
@@ -41,23 +39,12 @@ const Navbar = () => {
 							Contact
 						</Link>
 					</div>
-					<div className="col-span-1 flex justify-between items-center gap-3 max-lg:hidden">
+					<div className="col-span-1 flex justify-end items-center gap-3 max-lg:hidden">
 						<ButtonSearch />
 						<UserControl />
 					</div>
-					<div className="col-span-1 hidden justify-between items-center gap-3 max-lg:flex">
+					<div className="col-span-1 hidden justify-end items-center gap-3 max-lg:flex">
 						<ButtonSearch />
-						<NotificationResponsive />
-						<Link
-							href="cv-services"
-							className="p-2 relative bg-transparent rounded-md text-primary hover:text-white hover:bg-primary hover_navbtn"
-						>
-							<span className="absolute top-1 right-1 flex h-2 w-2">
-								<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff9c00] opacity-75"></span>
-								<span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff9c00]"></span>
-							</span>
-							<MessagesSquare strokeWidth={1.25} />
-						</Link>
 						<UserlControlResponsive />
 					</div>
 				</div>

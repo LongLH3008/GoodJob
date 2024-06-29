@@ -3,7 +3,7 @@ import { StatusCode } from "../enum/HttpStatus";
 import { TLogin, TRegister } from "../interfaces/User.interface";
 import API_Error from "../utils/Api.error";
 import bcrypt from "bcryptjs";
-import jwt, { Secret } from "jsonwebtoken";
+import jwt, { Secret, verify } from "jsonwebtoken";
 import Locals from "../providers/Locals";
 import { Response } from "express";
 import User from "./User.service";
@@ -45,12 +45,22 @@ class Auth {
 	}
 
 	static async Logout(res: Response, req: Request) {
-		if (req.cookies[`${Locals.config().SECRET_COOKIE_TOKEN_KEY}`])
+		const token = req.cookies[`${Locals.config().SECRET_COOKIE_TOKEN_KEY}`];
+		const userCookie = req.cookies["uid"];
+
+		if (!token || !userCookie) {
+			token && res.clearCookie(`${Locals.config().SECRET_COOKIE_TOKEN_KEY}`);
+			userCookie && res.clearCookie("uid");
+			throw new API_Error("Login expired", StatusCode.FORBIDDEN);
+		}
+
+		const key = new TextEncoder().encode(Locals.config().SECRET_KEY) as unknown as Secret;
+		verify(token, key, async (err: any, payload: any) => {
+			res.clearCookie("uid");
 			res.clearCookie(`${Locals.config().SECRET_COOKIE_TOKEN_KEY}`);
-		const id = req.cookies["uid"];
-		if (!id) throw new API_Error("Login expred", StatusCode.FORBIDDEN);
-		res.clearCookie(`uid`);
-		await prisma.user.update({ where: { id }, data: { user_status: "offline" } });
+			if (err) return res.status(403).json("Login expired");
+			await prisma.user.update({ where: { id: payload.id }, data: { user_status: "offline" } });
+		});
 		return true;
 	}
 }

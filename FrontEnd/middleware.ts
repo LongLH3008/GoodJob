@@ -1,20 +1,15 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 import { JWSSignatureVerificationFailed } from "jose/errors";
+import { Logout } from "./lib/api/auth";
 
-// const routes = {
-// 	employerPaths: ["/employer", "/recr-services"],
-// 	authPaths: ["/login", "/register", "/forgotpassword"],
-// 	guesPaths: ["/company", "/contact", "/about"],
-// 	applicantPaths: ["/applicant", "/cv-services"],
-// 	adminPaths: ["/dashboard"],
-// };
-
-const employerPaths = ["/employer", "/recr-services"];
-const authPaths = ["/login", "/register", "/forgotpassword"];
-const guesPaths = ["/company", "/contact", "/about"];
-const applicantPaths = ["/applicant", "/cv-services"];
-const adminPaths = ["/dashboard"];
+const routes = {
+	employerPaths: ["/employer", "/recr-services"],
+	authPaths: ["/login", "/register", "/forgotpassword"],
+	guesPaths: ["/company", "/contact", "/about"],
+	applicantPaths: ["/applicant", "/cv-services"],
+	adminPaths: ["/dashboard"],
+};
 
 export async function middleware(request: NextRequest) {
 	const { pathname } = request.nextUrl;
@@ -55,23 +50,23 @@ export async function middleware(request: NextRequest) {
 		}
 	};
 
-	if (authPaths.some((path) => pathname.startsWith(path))) {
+	if (routes.authPaths.some((path) => pathname.startsWith(path))) {
 		return protectRoute("", role, "no need login");
 	}
 
-	if (adminPaths.some((path) => pathname.startsWith(path))) {
+	if (routes.adminPaths.some((path) => pathname.startsWith(path))) {
 		return protectRoute("Administrator", role, "need login");
 	}
 
-	if (employerPaths.some((path) => pathname.startsWith(path))) {
+	if (routes.employerPaths.some((path) => pathname.startsWith(path))) {
 		return protectRoute("Employer", role, "need login");
 	}
 
-	if (applicantPaths.some((path) => pathname.startsWith(path))) {
+	if (routes.applicantPaths.some((path) => pathname.startsWith(path))) {
 		return protectRoute("Applicant", role, "need login");
 	}
 
-	if (pathname == "/" || guesPaths.some((path) => pathname.startsWith(path))) {
+	if (pathname == "/" || routes.guesPaths.some((path) => pathname.startsWith(path))) {
 		if (role == "Administrator") return Response.redirect(new URL("/dashboard", request.url));
 		if (role == "Employer") return Response.redirect(new URL("/employer", request.url));
 	}

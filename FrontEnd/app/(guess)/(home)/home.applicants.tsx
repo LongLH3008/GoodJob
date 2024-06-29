@@ -1,24 +1,20 @@
 import React from "react";
 import { ClipboardPaste, FileSearch, PencilLine } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 
 type Props = {};
 
 const HomeApplicant = (props: Props) => {
 	return (
-		<div className="res_layout max-lg:gap-5 gap-16 py-[10%] h-fit bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-start">
-			<Image
-				src={"/home_applicant.jpg"}
-				width={100}
-				height={100}
-				alt="applicant"
-				className="w-1/2 h-full max-lg:hidden block hover:scale-[0.9] transition-all"
+		<div className="res_layout max-lg:gap-5 gap-16 py-[5%] h-fit flex items-center justify-start">
+			<div
+				style={{ backgroundImage: "url('./home_applicant.jpg')" }}
+				className="bg-cover w-1/2 h-[65vh] max-lg:hidden block hover:scale-[0.9] transition-all"
 			/>
 			<div className="flex  gap-3 sm:justify-between h-full w-1/2 lg:flex-col max-lg:w-full max-lg:gap-10 max-lg:grid max-lg:grid-cols-2 max-sm:grid-cols-1 max-sm:grid-rows-2">
-				<div className="text-4xl max-sm:text-2xl font-light">
-					APPLY FOR YOUR <span className="font-semibold">DREAM JOB</span>
-					<blockquote className="text-lg max-md:text-sm leading-5 mt-5">
+				<div className="text-2xl max-sm:text-2xl">
+					Apply for your <span className="font-semibold text-[#ff9c00] text-center">dream job</span>
+					<blockquote className="text-[15px] max-md:text-sm leading-5 mt-5 font-light">
 						"Our mission is to connect people to jobs at scale. In order for businesses to hire
 						the best talent, people deserve to easily find a job they want to do. Start applying
 						to the 5,000+ companies in our network." <br />
@@ -30,7 +26,7 @@ const HomeApplicant = (props: Props) => {
 						<br />
 					</blockquote>
 				</div>
-				<ul className="text-lg uppercase *:border-b *:mt-5 *:py-5 *:border-primary *:cursor-pointer *:max-lg:mt-3 *:max-lg:py-3 max-lg:self-end max-lg:text-[12px] ">
+				<ul className="text-[14px] *:border-b *:border-zinc-200 *:mt-5 *:py-5 *:cursor-pointer *:max-lg:mt-3 *:max-lg:py-3 max-lg:self-end max-lg:text-[12px] ">
 					<li className="">
 						<Link
 							href={"/"}

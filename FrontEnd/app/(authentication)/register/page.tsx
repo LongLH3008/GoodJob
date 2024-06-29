@@ -6,17 +6,51 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { instance } from "@/lib/api/api";
+import { SwrExecute } from "@/lib/hooks/swr";
 import { registerValidate } from "@/lib/schemas";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { KeyRound, Lock, Unplug, UserCheck, UserRound, X } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import PulseLoader from "react-spinners/PulseLoader";
+import useSWRMutation from "swr/mutation";
 
 type Props = {};
 
 const RegisterPage = (props: Props) => {
 	const { toast } = useToast();
+	const router = useRouter();
+	const [isSubmit, setIsSubmit] = useState<boolean>(false);
+
+	const { trigger } = useSWRMutation("/auth/register", SwrExecute, {
+		onSuccess: (data) => {
+			toast({
+				title: `Register Success`,
+				description: `Welcome to GoodJob`,
+				content: "Let's login right now",
+				action: <UserCheck strokeWidth={1.25} color="#ff9c00" />,
+				duration: 5000,
+			});
+			router.replace("/login");
+		},
+		onError: (error) => {
+			toast({
+				title: "Register failed",
+				description: error.response
+					? error.response.data
+					: "Could not connect to server. Please try again later",
+				duration: 3500,
+				action: error.response ? (
+					<Lock strokeWidth={1.25} className="text-red-500" />
+				) : (
+					<Unplug strokeWidth={1.25} className="text-red-500" />
+				),
+			});
+		},
+	});
+
 	const form = useForm<IRegister>({
 		resolver: joiResolver(registerValidate),
 		defaultValues: {
@@ -27,32 +61,9 @@ const RegisterPage = (props: Props) => {
 	});
 
 	async function onSubmit(data: IRegister) {
-		console.log(data);
-		try {
-			const result = await instance.post("/auth/register", data);
-			toast({
-				variant: "success",
-				title: `Register Success`,
-				description: `Welcome to GoodJob recruitment community`,
-				content: "Let's login right now",
-				action: <UserCheck color="#ff9c00" />,
-				duration: 5000,
-			});
-		} catch (error: any) {
-			toast({
-				variant: "destructive",
-				title: "Register failed",
-				description: error.response
-					? error.response.data
-					: "Could not connect to server. Please try again later",
-				duration: 3500,
-				action: error.response ? (
-					<Lock className="text-red-500" />
-				) : (
-					<Unplug className="text-red-500" />
-				),
-			});
-		}
+		await trigger({ method: "POST", formdata: data });
+		setIsSubmit(true);
+		setTimeout(() => setIsSubmit(false), 1500);
 	}
 
 	return (
@@ -84,7 +95,10 @@ const RegisterPage = (props: Props) => {
 														"text-red-500 validate_fail"
 													}`}
 												>
-													<UserRound className="absolute left-3 h-full" />
+													<UserRound
+														strokeWidth={1}
+														className="absolute left-3 h-full"
+													/>
 													<Input
 														type="text"
 														className={`w-full pl-12 ${
@@ -114,7 +128,10 @@ const RegisterPage = (props: Props) => {
 														"text-red-500 validate_fail"
 													}`}
 												>
-													<KeyRound className="absolute left-3 h-full" />
+													<KeyRound
+														strokeWidth={1}
+														className="absolute left-3 h-full"
+													/>
 													<Input
 														type="password"
 														className={`w-full pl-12 ${
@@ -145,7 +162,10 @@ const RegisterPage = (props: Props) => {
 														"text-red-500 validate_fail"
 													}`}
 												>
-													<KeyRound className="absolute left-3 h-full" />
+													<KeyRound
+														strokeWidth={1}
+														className="absolute left-3 h-full"
+													/>
 													<Input
 														type="password"
 														className={`w-full pl-12 ${
@@ -199,8 +219,8 @@ const RegisterPage = (props: Props) => {
 										</FormItem>
 									)}
 								/>
-								<Button type="submit" className="mt-2">
-									Register
+								<Button disabled={isSubmit} type="submit" className="mt-2">
+									{isSubmit ? <PulseLoader color="#000000" /> : "Register"}
 								</Button>
 							</form>
 						</Form>

@@ -10,7 +10,7 @@ const HomeProfessionCategory = (props: Props) => {
 	return (
 		<div className="res_layout py-16">
 			<div className="flex flex-col gap-10">
-				<h2 className="text-xl text-center font-semibold uppercase">Profession Category</h2>
+				<h2 className="text-xl text-center">Profession Category</h2>
 				<div className="grid grid-cols-5 gap-5 max-lg:grid-cols-4 max-sm:grid-cols-3 max-sm:text-sm">
 					<SkeletonProvider
 						skeleton={
@@ -27,7 +27,7 @@ const HomeProfessionCategory = (props: Props) => {
 								<Link
 									key={index}
 									href={"/"}
-									className="bg-zinc-100 font-400 text-center p-2 rounded-md hover_navbtn hover:-translate-y-1 hover:shadow-md hover:text-white transition-all duration-300"
+									className="text-sm bg-zinc-100 font-400 text-center p-2 rounded-md hover_navbtn hover:shadow-md hover:text-white"
 								>
 									{item}
 								</Link>
