@@ -1,3 +1,5 @@
+type RequestMethod = "POST" | "PUT" | "DELETE";
+
 enum company_role_t {
 	Employee = "Employee",
 	Manager = "Manager",

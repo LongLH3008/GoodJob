@@ -25,6 +25,7 @@ class User {
 				id,
 			},
 		});
+
 		if (!user) throw new API_Error("User does not exist", StatusCode.NOT_FOUND);
 		user.createAt = generateLocaleTime(user.createAt);
 		user.updateAt = user.updateAt == null ? null : generateLocaleTime(user.updateAt);
@@ -39,6 +40,7 @@ class User {
 		]);
 		return {
 			...user,
+			password: null,
 			User_Contact,
 			User_Information,
 			User_Social,
@@ -91,12 +93,18 @@ class User {
 	}
 
 	static async createInfo(user_id: UID, dt: IUserInfo) {
-		const { city, district, detail_address, phone, avatar, name, birth, gender, company_role } = dt;
-		SchemaValidate(ContactSchema, { city, district, detail_address, phone });
+		const { city, district, detail_address, phone, avatar, name, birth, gender, company_role, ward } = dt;
+		SchemaValidate(ContactSchema, { city, district, detail_address, phone, ward });
 		SchemaValidate(InfoSchema, { avatar, name, birth, gender, company_role });
 		await this.get(user_id);
 		const newInfo = await User_Info.createByUserId(user_id, { avatar, name, birth, gender, company_role });
-		const newContact = await User_Contact.createByUserId(user_id, { city, district, detail_address, phone });
+		const newContact = await User_Contact.createByUserId(user_id, {
+			city,
+			district,
+			detail_address,
+			phone,
+			ward,
+		});
 		this.check(user_id);
 		await Promise.all([
 			User_ServiceUsing.addFreeTrial(user_id),
@@ -111,8 +119,8 @@ class User {
 	}
 
 	static async updateInfo(user_id: UID, dt: any) {
-		const { city, district, detail_address, phone, avatar, name, birth, gender, company_role } = dt;
-		SchemaValidate(ContactSchema, { city, district, detail_address, phone });
+		const { city, district, detail_address, phone, avatar, name, birth, gender, company_role, ward } = dt;
+		SchemaValidate(ContactSchema, { city, district, detail_address, phone, ward });
 		SchemaValidate(InfoSchema, { avatar, name, birth, gender, company_role });
 		await Promise.all([
 			this.get(user_id),
@@ -126,7 +134,13 @@ class User {
 			}),
 		]);
 		const newInfo = await User_Info.updateByUserId(user_id, { avatar, name, birth, gender, company_role });
-		const newContact = await User_Contact.updateByUserId(user_id, { city, district, detail_address, phone });
+		const newContact = await User_Contact.updateByUserId(user_id, {
+			city,
+			district,
+			detail_address,
+			phone,
+			ward,
+		});
 		return { newInfo, newContact };
 	}
 

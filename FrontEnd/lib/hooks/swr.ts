@@ -1,10 +1,13 @@
+import { mutate } from "swr";
 import { instance } from "../api/api";
 
 export const SwrFetcher = async (url: string) => {
 	try {
 		const { data } = await instance.get(url);
+		mutate(url, data, false);
 		return data;
 	} catch (error) {
+		console.error("Fetch error:", error);
 		throw error;
 	}
 };
@@ -14,21 +17,34 @@ export const SwrExecute = async (
 	{
 		arg,
 	}: {
-		arg: { method?: "POST" | "PUT" | "DELETE"; formdata?: any };
+		arg: { method?: RequestMethod; formdata?: any };
 	}
 ) => {
 	try {
-		if (arg.method === "POST") {
-			const { data } = await instance.post(url, arg.formdata);
-			return data;
-		} else if (arg.method === "PUT") {
-			const { data } = await instance.put(url, arg.formdata);
-			return data;
-		} else if (arg.method === "DELETE") {
-			const { data } = await instance.delete(url);
-			return data;
+		let data;
+		const optimisticData = arg.formdata || null;
+
+		switch (arg.method) {
+			case "POST":
+				mutate(url, optimisticData, false);
+				data = await instance.post(url, arg.formdata);
+				break;
+			case "PUT":
+				mutate(url, optimisticData, false);
+				data = await instance.put(url, arg.formdata);
+				break;
+			case "DELETE":
+				mutate(url, optimisticData, false);
+				data = await instance.delete(url);
+				break;
+			default:
+				throw new Error("Unsupported method");
 		}
+
+		mutate(url, data.data, false);
+		return data.data;
 	} catch (error) {
+		console.error("Execute error:", error);
 		throw error;
 	}
 };

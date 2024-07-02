@@ -6,7 +6,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import Link from "next/link";
-import { loginValidate } from "@/lib/schemas";
+import { loginValidate } from "@/lib/schemas/auth";
 import { KeyRound, Lock, LockOpen, Unplug, UserRound, X } from "lucide-react";
 import { useState } from "react";
 import PulseLoader from "react-spinners/PulseLoader";

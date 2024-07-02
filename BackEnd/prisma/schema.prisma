@@ -282,6 +282,7 @@ model User_Contact {
   district       String  @db.VarChar(255)
   detail_address String  @db.VarChar(255)
   phone          String? @db.VarChar(14)
+  ward           String? @db.VarChar(255)
   User           User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 

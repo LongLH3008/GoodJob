@@ -17,6 +17,7 @@ export const InfoSchema = Joi.object({
 
 export const ContactSchema = Joi.object({
 	city: Joi.string().required(),
+	ward: Joi.string().required(),
 	district: Joi.string().required(),
 	detail_address: Joi.string().required(),
 	phone: Joi.string()
