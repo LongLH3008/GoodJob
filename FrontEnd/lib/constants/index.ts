@@ -1,3 +1,5 @@
+export const gender = [{ gender: "Male" }, { gender: "Female" }];
+
 export const profession = [
 	"Agriculture",
 	"Architecture",

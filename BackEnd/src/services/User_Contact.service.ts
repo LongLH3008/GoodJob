@@ -21,16 +21,11 @@ class User_Contact {
 	}
 
 	static async updateByUserId(user_id: UID, dt: any) {
-		const { city, district, detail_address, phone } = dt;
-		SchemaValidate(ContactSchema, { city, district, detail_address, phone });
-		const contact = await this.getByUserId(user_id);
-		const { id } = contact;
+		const isExist = await prisma.user_Contact.findFirst({ where: { user_id } });
+		if (!isExist) throw new API_Error("Contact not found", StatusCode.UNAUTHORIZED);
 		return await prisma.user_Contact.update({
-			where: {
-				id,
-				user_id,
-			},
-			data: { ...dt },
+			where: { user_id, id: isExist.id },
+			data: { user_id, ...dt },
 		});
 	}
 }

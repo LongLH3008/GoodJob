@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/components/ui/use-toast";
 import { instance } from "@/lib/api/api";
 import { SwrExecute } from "@/lib/hooks/swr";
-import { registerValidate } from "@/lib/schemas";
+import { registerValidate } from "@/lib/schemas/auth";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { KeyRound, Lock, Unplug, UserCheck, UserRound, X } from "lucide-react";
 import Link from "next/link";

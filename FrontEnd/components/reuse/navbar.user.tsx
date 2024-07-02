@@ -21,20 +21,22 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
 import { Notification } from "./navbar.user.notification";
-import { UserState } from "@/lib/hooks/user";
+import { InfoState, UserState } from "@/lib/hooks/user";
 import { instance } from "@/lib/api/api";
 import { toast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 import { getUser } from "@/lib/api/auth";
-import { Logout as out } from "../../lib/api/auth";
+import Image from "next/image";
+import SkeletonProvider from "./skeleton";
+import { Skeleton } from "../ui/skeleton";
 
 export function UserControl() {
 	const user = UserState();
+	const info = InfoState();
 	const router = useRouter();
 	const isLogged = Cookies.get("uid");
 
@@ -42,7 +44,8 @@ export function UserControl() {
 		(async () => {
 			if (isLogged && isLogged !== "") {
 				getUser(isLogged);
-			} else {
+			}
+			if (!isLogged && user.isLogged) {
 				await Logout();
 			}
 		})();
@@ -98,17 +101,33 @@ export function UserControl() {
 					</Link>
 					<DropdownMenu>
 						<DropdownMenuTrigger className="cursor-pointer bg-white rounded-full" asChild>
-							<Avatar className="shadow-sm w-8 h-8">
-								<AvatarImage src="./user.png" alt="@shadcn" />
-							</Avatar>
+							<div className="h-8 w-8 rounded-full overflow-hidden flex items-center justify-center">
+								<Image
+									width={200}
+									height={100}
+									src={
+										info.avatar && info.avatar !== null
+											? info.avatar
+											: "/user.png"
+									}
+									sizes="100vw"
+									alt="Description of my image"
+									className="h-full w-full object-cover"
+								/>
+							</div>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end" className="w-56">
 							<DropdownMenuLabel>My Account</DropdownMenuLabel>
 							<DropdownMenuSeparator />
 							<DropdownMenuGroup>
 								<DropdownMenuItem>
-									<User className="mr-2 h-4 w-4" />
-									<span>Profile</span>
+									<Link
+										className="flex items-center w-full"
+										href={`/applicant-profile/${isLogged}`}
+									>
+										<User className="mr-2 h-4 w-4" />
+										<span>Profile</span>
+									</Link>
 								</DropdownMenuItem>
 								<DropdownMenuItem>
 									<ShoppingBag className="mr-2 h-4 w-4" />

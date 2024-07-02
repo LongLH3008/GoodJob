@@ -39,4 +39,5 @@ interface IUserInfo extends T_Timestamp {
 	district: string;
 	detail_address: string;
 	phone: string;
+	ward: string;
 }
