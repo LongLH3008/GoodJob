@@ -31,8 +31,6 @@ import { useEffect } from "react";
 import Cookies from "js-cookie";
 import { getUser } from "@/lib/api/auth";
 import Image from "next/image";
-import SkeletonProvider from "./skeleton";
-import { Skeleton } from "../ui/skeleton";
 
 export function UserControl() {
 	const user = UserState();
@@ -100,7 +98,7 @@ export function UserControl() {
 						<MessagesSquare strokeWidth={1.25} />
 					</Link>
 					<DropdownMenu>
-						<DropdownMenuTrigger className="cursor-pointer bg-white rounded-full" asChild>
+						<DropdownMenuTrigger className="cursor-pointer z-30" asChild>
 							<div className="h-8 w-8 rounded-full overflow-hidden flex items-center justify-center">
 								<Image
 									width={200}
@@ -110,7 +108,6 @@ export function UserControl() {
 											? info.avatar
 											: "/user.png"
 									}
-									sizes="100vw"
 									alt="Description of my image"
 									className="h-full w-full object-cover"
 								/>
@@ -120,32 +117,40 @@ export function UserControl() {
 							<DropdownMenuLabel>My Account</DropdownMenuLabel>
 							<DropdownMenuSeparator />
 							<DropdownMenuGroup>
-								<DropdownMenuItem>
+								<DropdownMenuItem className="py-0">
 									<Link
-										className="flex items-center w-full"
+										className="flex items-center w-full h-full py-2"
 										href={`/applicant-profile/${isLogged}`}
 									>
 										<User className="mr-2 h-4 w-4" />
 										<span>Profile</span>
 									</Link>
 								</DropdownMenuItem>
-								<DropdownMenuItem>
-									<ShoppingBag className="mr-2 h-4 w-4" />
-									<span>Order</span>
+								<DropdownMenuItem className="py-0">
+									<Link href={"/"} className="flex items-center w-full h-full py-2">
+										<ShoppingBag className="mr-2 h-4 w-4" />
+										<span>Order</span>
+									</Link>
 								</DropdownMenuItem>
-								<DropdownMenuItem>
-									<SquarePen className="mr-2 h-4 w-4" />
-									<span>CV</span>
+								<DropdownMenuItem className="py-0">
+									<Link href={"/"} className="flex items-center w-full h-full py-2">
+										<SquarePen className="mr-2 h-4 w-4" />
+										<span>CV</span>
+									</Link>
 								</DropdownMenuItem>
-								<DropdownMenuItem>
-									<ClipboardCopy className="mr-2 h-4 w-4" />
-									<span>Applied Jobs</span>
+								<DropdownMenuItem className="py-0">
+									<Link href={"/"} className="flex items-center w-full h-full py-2">
+										<ClipboardCopy className="mr-2 h-4 w-4" />
+										<span>Applied Jobs</span>
+									</Link>
 								</DropdownMenuItem>
 							</DropdownMenuGroup>
 							<DropdownMenuSeparator />
-							<DropdownMenuItem>
-								<KeyRound className="mr-2 h-4 w-4" />
-								<span>Change Password</span>
+							<DropdownMenuItem className="py-0">
+								<Link href={"/"} className="flex items-center w-full h-full py-2">
+									<KeyRound className="mr-2 h-4 w-4" />
+									<span>Change Password</span>
+								</Link>
 							</DropdownMenuItem>
 							<DropdownMenuItem onClick={() => Logout()}>
 								<LogOut className="mr-2 h-4 w-4" />

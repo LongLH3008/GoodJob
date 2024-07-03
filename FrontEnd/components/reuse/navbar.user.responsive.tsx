@@ -6,6 +6,7 @@ import {
 	CircleDashed,
 	ClipboardCopy,
 	KeyRound,
+	Lock,
 	LogIn,
 	LogOut,
 	Menu,
@@ -13,18 +14,51 @@ import {
 	PackagePlus,
 	ShoppingBag,
 	SquarePen,
+	Unplug,
 	User,
 } from "lucide-react";
-import { Avatar, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
 import { NotificationResponsive } from "./navbar.user.notification.responsive";
-import { UserState } from "@/lib/hooks/user";
+import { InfoState, UserState } from "@/lib/hooks/user";
+import Image from "next/image";
+import { instance } from "@/lib/api/api";
+import { toast } from "../ui/use-toast";
+import { useRouter } from "next/navigation";
 
 export function UserlControlResponsive() {
-	const user = UserState();
+	const { isLogged, id, email, resetUser } = UserState();
+	const { avatar } = InfoState();
+	const router = useRouter();
+
+	const Logout = async () => {
+		try {
+			await instance.get("/auth/logout");
+			toast({
+				title: `Logout success`,
+				description: `See you again ${email.split("@")[0]}`,
+				action: <LogOut strokeWidth={1.25} className="text-[#ff9c00]" />,
+				duration: 5000,
+			});
+			resetUser();
+			router.push("/");
+		} catch (error: any) {
+			toast({
+				description: error.response
+					? error.response.data
+					: "Could not connect to server. Please try again later",
+				duration: 3500,
+				action: error.response ? (
+					<Lock strokeWidth={1.25} className="text-red-500" />
+				) : (
+					<Unplug strokeWidth={1.25} className="text-red-500" />
+				),
+			});
+			error.response.data && router.push("/");
+		}
+	};
 	return (
 		<>
-			{user.isLogged && (
+			{isLogged && (
 				<>
 					<NotificationResponsive />
 					<Link
@@ -49,15 +83,22 @@ export function UserlControlResponsive() {
 					<SheetHeader>
 						{/* Sidebar Title */}
 						<SheetTitle className="text-left pb-5 border-b flex items-center gap-3">
-							{user.isLogged ? (
+							{isLogged ? (
 								<>
-									<Avatar className="shadow-sm w-8 h-8">
-										<AvatarImage
-											src={user.avatar !== "" ? user.avatar : "./user.png"}
-											alt="@shadcn"
+									<div className="shadow-sm flex items-center justify-center overflow-hidden rounded-full w-8 h-8">
+										<Image
+											src={
+												avatar !== ""
+													? (avatar as string)
+													: "./user.png"
+											}
+											width={100}
+											height={100}
+											className="w-full h-full object-cover"
+											alt="avatar"
 										/>
-									</Avatar>
-									<p className="font-semibold text-sm">{user.email}</p>
+									</div>
+									<p className="font-semibold text-sm">{email}</p>
 								</>
 							) : (
 								<>
@@ -70,6 +111,12 @@ export function UserlControlResponsive() {
 
 					{/* Sidebar Link  */}
 					<div className="grid gap-4 py-4 border-b text-sm">
+						<SheetClose asChild>
+							<Link href={"/"} className="flex items-center gap-3">
+								<CircleDashed strokeWidth={1.25} className="mr-2 h-5 w-5" />
+								<span>Home</span>
+							</Link>
+						</SheetClose>
 						<SheetClose asChild>
 							<Link href={"/job"} className="flex items-center gap-3">
 								<CircleDashed strokeWidth={1.25} className="mr-2 h-5 w-5" />
@@ -98,7 +145,7 @@ export function UserlControlResponsive() {
 					{/* -------------- */}
 
 					{/* Sidebar UserControl */}
-					{user.isLogged && (
+					{isLogged && (
 						<>
 							<div className="grid gap-4 py-4 border-b text-sm">
 								<SheetClose asChild>
@@ -132,10 +179,13 @@ export function UserlControlResponsive() {
 						</>
 					)}
 					<div className="grid gap-4 py-4 text-sm">
-						{user.isLogged ? (
+						{isLogged ? (
 							<>
 								<SheetClose asChild>
-									<Link href={"/"} className="flex items-center gap-3">
+									<Link
+										href={`/applicant-profile/${id}`}
+										className="flex items-center gap-3"
+									>
 										<User strokeWidth={1.25} className="mr-2 h-5 w-5" />
 										<span>Profile</span>
 									</Link>
@@ -150,10 +200,13 @@ export function UserlControlResponsive() {
 									</Link>
 								</SheetClose>
 								<SheetClose asChild>
-									<Link href={"/logout"} className="flex items-center gap-3">
+									<span
+										onClick={() => Logout()}
+										className="flex items-center gap-3"
+									>
 										<LogOut strokeWidth={1.25} className="mr-2 h-5 w-5" />
 										<span>Logout</span>
-									</Link>
+									</span>
 								</SheetClose>
 							</>
 						) : (

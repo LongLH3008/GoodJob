@@ -1,4 +1,3 @@
-"use client";
 import HomeApplicant from "@/app/(guess)/(home)/home.applicants";
 import HomeBanner from "@/app/(guess)/(home)/home.banner";
 import HomeProfessionCategory from "@/app/(guess)/(home)/home.professionlist";

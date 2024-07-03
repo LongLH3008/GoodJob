@@ -142,6 +142,8 @@ model Company {
   check       String?       @default("0") @db.Bit(1)
   createAt    DateTime?     @default(now())
   updateAt    DateTime?     @db.Timestamptz(6)
+  address     String?
+  avatar      String?
   User        User          @relation(fields: [employer_id], references: [id], onDelete: Cascade)
   Recruitment Recruitment[]
   Reviews     Reviews[]
@@ -206,18 +208,20 @@ model Recruitment {
   id                      String                    @id
   company_id              String
   job                     String                    @db.VarChar(14)
-  position                String                    @default("Employee") @db.VarChar(14)
-  exp                     Int
   salary                  String                    @db.VarChar(30)
-  benefits                String?                   @db.VarChar(300)
-  describe                String?                   @db.VarChar(300)
-  require                 String?                   @db.VarChar(300)
+  benefits                String?                   @db.VarChar(500)
+  describe                String?                   @db.VarChar(500)
+  require                 String?                   @db.VarChar(500)
   end                     DateTime                  @db.Date
   recr_status             recr_status_t?            @default(Recruiting)
   createAt                DateTime?                 @default(now())
   updateAt                DateTime?
   recommended             String?                   @default("0") @db.Bit(1)
   work_format             recr_format_t?            @default(FullTime)
+  profession              String
+  position                recr_position_t           @default(Employee)
+  exp                     String
+  slot                    Int?
   Company                 Company                   @relation(fields: [company_id], references: [id], onDelete: Cascade)
   Recruitment_Information Recruitment_Information[]
 
@@ -281,6 +285,7 @@ model User_Contact {
   district       String  @db.VarChar(255)
   detail_address String  @db.VarChar(255)
   phone          String? @db.VarChar(14)
+  ward           String? @db.VarChar(255)
   User           User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
@@ -391,7 +396,7 @@ enum recr_format_t {
   Freelance
   Contract
   Temporary
-  Internship
+  Other
 }
 
 enum recr_info_status_t {
@@ -448,4 +453,14 @@ enum vote_t {
   Average
   Good
   Very_Good @map("Very Good")
+}
+
+enum recr_position_t {
+  Employee
+  Leader
+  Monitoring
+  Manager
+  Director
+  Intern
+  Other
 }

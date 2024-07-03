@@ -4,7 +4,6 @@ import { instance } from "../api/api";
 export const SwrFetcher = async (url: string) => {
 	try {
 		const { data } = await instance.get(url);
-		mutate(url, data, false);
 		return data;
 	} catch (error) {
 		console.error("Fetch error:", error);

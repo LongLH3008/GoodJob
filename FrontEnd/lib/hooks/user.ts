@@ -25,7 +25,7 @@ export const UserState = create<UserState>((set) => ({
 	resetUser: () => {
 		set((state) => ({
 			email: "",
-			user_id: "",
+			id: "",
 			user_role: "",
 			user_status: "",
 			user_type: "",

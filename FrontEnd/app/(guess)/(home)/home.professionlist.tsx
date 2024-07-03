@@ -8,7 +8,7 @@ type Props = {};
 
 const HomeProfessionCategory = (props: Props) => {
 	return (
-		<div className="res_layout py-16">
+		<div className="res_layout py-16 bg-white">
 			<div className="flex flex-col gap-10">
 				<h2 className="text-xl text-center">Profession Category</h2>
 				<div className="grid grid-cols-5 gap-5 max-lg:grid-cols-4 max-sm:grid-cols-3 max-sm:text-sm">

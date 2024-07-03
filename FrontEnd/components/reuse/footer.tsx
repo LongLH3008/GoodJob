@@ -2,13 +2,16 @@ import { Facebook, Instagram, Mail, Send, Twitter } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import StickyFooter from "./footer.sticky";
+import Logo from "../../public/logo_secondary.svg";
+import NextFavicon from "../../public/next_favicon.svg";
+import NextLogo from "../../public/next.svg";
 
 function Footer() {
 	return (
 		<>
 			<StickyFooter className="hidden lg:block">
 				<div className="flex flex-col gap-5 justify-end items-center">
-					<Image src={"./logo_secondary.svg"} width={200} height={100} alt="logo" />
+					<Image src={Logo} width={200} height={100} alt="logo" />
 					<div className="w-2/5 gap-10 flex justify-between items-start py-3">
 						<ul className="text-[11px] max-sm:text-sm flex flex-col gap-2">
 							<li className="font-semibold text-[13px] mb-2">About</li>
@@ -117,20 +120,8 @@ function Footer() {
 					<div className="text-[10px] flex gap-3 items-center mt-5">
 						Made from{" "}
 						<a className="flex items-center gap-2" target="_blank" href="https://nextjs.org/">
-							<Image
-								src={"./next_favicon.svg"}
-								className="aspect-auto"
-								width={15}
-								height={100}
-								alt="logo"
-							/>
-							<Image
-								src={"./next.svg"}
-								className="aspect-auto"
-								width={40}
-								height={100}
-								alt="logo"
-							/>
+							<Image src={NextFavicon} width={15} height={100} alt="logo" />
+							<Image src={NextLogo} width={40} height={100} alt="logo" />
 						</a>
 						by{" "}
 						<a
@@ -145,13 +136,7 @@ function Footer() {
 				</div>
 			</StickyFooter>
 			<div className="res_layout hidden max-lg:flex py-10 w-full bg-primary text-white flex-col gap-5 justify-center items-center">
-				<Image
-					src={"./logo_secondary.svg"}
-					width={200}
-					height={100}
-					alt="logo"
-					className="max-sm:self-start"
-				/>
+				<Image src={Logo} width={200} height={100} alt="logo" className="max-sm:self-start" />
 				<div className="gap-10 py-3 grid grid-cols-4 max-md:grid-cols-3 max-sm:grid-cols-1 max-sm:w-full">
 					<ul className="text-[11px] grid grid-cols-2 max-sm:text-sm sm:flex sm:flex-col gap-2">
 						<li className="font-semibold text-[13px] mb-2 max-sm:col-span-2 max-sm:text-[#ff9c00]">
@@ -262,22 +247,10 @@ function Footer() {
 					</ul>
 				</div>
 				<div className="text-[10px] flex gap-3 items-center mt-5 max-sm:self-start">
-					Made from{" "}
+					Made from
 					<a className="flex items-center gap-2" target="_blank" href="https://nextjs.org/">
-						<Image
-							src={"./next_favicon.svg"}
-							className="aspect-auto"
-							width={15}
-							height={100}
-							alt="logo"
-						/>
-						<Image
-							src={"./next.svg"}
-							className="aspect-auto"
-							width={40}
-							height={100}
-							alt="logo"
-						/>
+						<Image src={NextFavicon} width={15} height={100} alt="logo" />
+						<Image src={NextLogo} width={40} height={100} alt="logo2" />
 					</a>
 					by{" "}
 					<a

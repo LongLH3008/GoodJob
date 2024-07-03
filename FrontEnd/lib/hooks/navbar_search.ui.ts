@@ -17,7 +17,7 @@ export type Search = {
 	resetFilter: () => void;
 };
 
-export const NavbarSearchState = create<Search>((set) => ({
+export const FilterJob = create<Search>((set) => ({
 	isOpen: false,
 	scroll: false,
 	isChange: false,
