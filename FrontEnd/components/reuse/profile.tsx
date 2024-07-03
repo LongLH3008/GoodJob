@@ -25,7 +25,7 @@ import SkeletonProvider from "./skeleton";
 import { Skeleton } from "../ui/skeleton";
 import PulseLoader from "react-spinners/PulseLoader";
 
-const EditProfile = () => {
+const Profile = () => {
 	const { email, user_role } = UserState();
 	const { detail_address, district: dist, city: cit, phone, ward } = ContactState();
 	const { avatar, birth, company_role, gender, name } = InfoState();
@@ -39,7 +39,7 @@ const EditProfile = () => {
 		resolver: joiResolver(UserSchema),
 	});
 
-	const { trigger, isMutating } = useSWRMutation(`/user/info/${id}`, SwrExecute, {
+	const { trigger } = useSWRMutation(`/user/info/${id}`, SwrExecute, {
 		onSuccess: async () => {
 			toast({
 				description: `Update info successfully`,
@@ -115,7 +115,6 @@ const EditProfile = () => {
 			duration={1000}
 		>
 			<Form {...form}>
-				<p className="text-2xl mb-5">Your Profile</p>
 				<div className="flex justify-between items-start gap-3 max-lg:flex-wrap">
 					<div className="w-fit max-lg:w-full max-md:flex max-md:justify-between max-md:items-end bg-white rounded-xl h-fit p-5">
 						<ProfileAvatar avatarSrc={avatar as string} />
@@ -502,4 +501,4 @@ const EditProfile = () => {
 	);
 };
 
-export default EditProfile;
+export default Profile;

@@ -50,7 +50,7 @@ const ProfileAvatar = ({ avatarSrc }: { avatarSrc: string }) => {
 			<div className="flex flex-col gap-2">
 				<span
 					onClick={() => fileRef.current?.click()}
-					className="md:w-12 md:h-12 w-8 h-8 grid place-items-center rounded-md cursor-pointer bg-primary hover_navbtn text-white"
+					className="md:w-12 md:h-12 w-8 h-8 bg-[rgba(0,0,0,0.75)] grid place-items-center rounded-md cursor-pointer hover_navbtn text-white"
 				>
 					<ImageUp strokeWidth={1.25} />
 				</span>
@@ -58,7 +58,7 @@ const ProfileAvatar = ({ avatarSrc }: { avatarSrc: string }) => {
 					onClick={() => {
 						setUpload({ file: null, demo: "", remove: true });
 					}}
-					className="md:w-12 md:h-12 w-8 h-8 grid place-items-center rounded-md cursor-pointer bg-primary hover_navbtn text-white"
+					className="md:w-12 md:h-12 w-8 h-8 bg-[rgba(0,0,0,0.75)] grid place-items-center rounded-md cursor-pointer hover_navbtn text-white"
 				>
 					<ImageOff strokeWidth={1.25} />
 				</span>

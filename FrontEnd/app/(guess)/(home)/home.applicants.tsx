@@ -1,17 +1,17 @@
 import React from "react";
 import { ClipboardPaste, FileSearch, PencilLine } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 type Props = {};
 
 const HomeApplicant = (props: Props) => {
 	return (
 		<div className="res_layout max-lg:gap-5 gap-16 py-[5%] h-fit flex items-center justify-start">
-			<div
-				style={{ backgroundImage: "url('./home_applicant.jpg')" }}
-				className="bg-cover w-1/2 h-[65vh] max-lg:hidden block hover:scale-[0.9] transition-all"
-			/>
-			<div className="flex  gap-3 sm:justify-between h-full w-1/2 lg:flex-col max-lg:w-full max-lg:gap-10 max-lg:grid max-lg:grid-cols-2 max-sm:grid-cols-1 max-sm:grid-rows-2">
+			<div className="w-1/2 h-[65vh] max-lg:hidden block hover:scale-[0.9] transition-all overflow-hidden">
+				<img src={"/home_applicant.jpg"} alt="home-applicant" className="object-cover w-full h-full" />
+			</div>
+			<div className="flex gap-3 sm:justify-between h-full w-1/2 lg:flex-col max-lg:w-full max-lg:gap-10 max-lg:grid max-lg:grid-cols-2 max-sm:grid-cols-1 max-sm:grid-rows-2">
 				<div className="text-2xl max-sm:text-2xl">
 					Apply for your <span className="font-semibold text-[#ff9c00] text-center">dream job</span>
 					<blockquote className="text-[15px] max-md:text-sm leading-5 mt-5 font-light">

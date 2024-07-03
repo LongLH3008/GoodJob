@@ -61,12 +61,6 @@ BEFORE UPDATE ON "Recruitment_Services"
 FOR EACH ROW
 EXECUTE FUNCTION update_updateAt_column();
 
--- User_ServiceUsing
-CREATE TRIGGER User_ServiceUsing_updateAt
-BEFORE UPDATE ON "User_ServiceUsing"
-FOR EACH ROW
-EXECUTE FUNCTION update_updateAt_column();
-
 -- Order
 CREATE TRIGGER Order_updateAt
 BEFORE UPDATE ON "Order"

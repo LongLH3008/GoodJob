@@ -7,7 +7,6 @@ import API_Error from "../utils/Api.error";
 import { generateUUID } from "../utils/GenerateUUID";
 import { generateIOSTime, generateLocaleTime } from "../utils/Time";
 import Company from "./Company.service";
-import User from "./User.service";
 
 class Recruitment {
 	private static async checkCompany(
@@ -63,10 +62,42 @@ class Recruitment {
 		return true;
 	}
 
-	static async getAll() {
-		const recr_list = await prisma.recruitment.findMany();
+	static async getAll(filter: any) {
+		const { page, limit } = filter;
+		const amount = parseInt(limit) || 12;
+		const skip = (page - 1) * amount;
+		const total = await prisma.recruitment.count({
+			where: {
+				...filter,
+				job: { contains: filter.job },
+				page: undefined,
+				limit: undefined,
+				order: undefined,
+			},
+		});
+		const recr_list = await prisma.recruitment.findMany({
+			where: {
+				...filter,
+				job: { contains: filter.job },
+				page: undefined,
+				limit: undefined,
+				order: undefined,
+			},
+			take: amount,
+			skip,
+			orderBy: { createAt: filter.order },
+			select: {
+				id: true,
+				job: true,
+				end: true,
+				salary: true,
+				location: true,
+				Company: { select: { avatar: true, name: true } },
+			},
+		});
 		if (!recr_list.length) throw new API_Error("There are no Recruitment found", StatusCode.NOT_FOUND);
-		return recr_list;
+		recr_list.map((item) => (item.end = new Date(item.end).toLocaleDateString("vi-VN") as unknown as Date));
+		return { recr_list, total };
 	}
 
 	static async get(id: UID) {

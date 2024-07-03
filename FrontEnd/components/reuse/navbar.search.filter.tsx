@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { Check, ChevronsUpDown, CirclePlus } from "lucide-react";
 import { ScrollArea } from "../ui/scroll-area";
-import { NavbarSearchState, Search } from "@/lib/hooks/navbar_search.ui";
+import { FilterJob, Search } from "@/lib/hooks/navbar_search.ui";
 
 const FilterSelect = ({
 	data,
@@ -20,7 +20,7 @@ const FilterSelect = ({
 	className?: string;
 }) => {
 	const [open, setOpen] = React.useState(false);
-	const search = NavbarSearchState();
+	const search = FilterJob();
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
@@ -29,7 +29,7 @@ const FilterSelect = ({
 					variant="outline"
 					role="combobox"
 					aria-expanded={open}
-					className={cn(`justify-between border-zinc-400 capitalize ${className}`)}
+					className={cn(`justify-between shadow-md border-none capitalize ${className}`)}
 				>
 					<div className="flex max-lg:gap-3 gap-5 max-md:text-[13px] items-center overflow-hidden">
 						<CirclePlus className="text-zinc-500 max-sm:hidden" strokeWidth={1.25} />
@@ -41,7 +41,7 @@ const FilterSelect = ({
 					<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className={cn(`p-0 w-[500px] ${className}`)}>
+			<PopoverContent className={cn(`p-0 w-[400px]`)}>
 				<Command>
 					<CommandInput placeholder="Search item..." />
 					<CommandList>

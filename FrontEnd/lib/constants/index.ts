@@ -24,7 +24,9 @@ export const profession = [
 	"Mining",
 	"Invesments",
 	"Retail",
+	"Sales",
 	"Travel",
+	"Telecommunication",
 	"Other",
 ];
 export const position = ["Employee", "Leader", "Monitoring", "Manager", "Director", "Intern", "Other"];
@@ -34,7 +36,7 @@ export const salary = [
 	"10 ~ 20 mil / month",
 	"Above 20 mil / month",
 	"Above 35 mil / month",
-	"Negotiate",
+	"Deal",
 ];
 export const form = ["FullTime", "PartTime", "Remote", "Freelance", "Contract", "Temporary", "Other"];
 export const location = [

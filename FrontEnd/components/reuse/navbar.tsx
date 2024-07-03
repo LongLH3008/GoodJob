@@ -14,13 +14,13 @@ const Navbar = () => {
 				GoodJob - Copy right 2024 &copy; LongLH
 			</div>
 			<StickyNavbar className="">
-				<div className="res_layout w-full h-full relative leading-[100%] flex justify-between items-center lg:grid lg:grid-cols-5">
-					<Link href={"/"} className="w-3/5 col-span-1 cursor-pointer flex items-center">
+				<div className="res_layout w-full h-full relative leading-[100%] flex justify-between items-center lg:grid lg:grid-cols-7">
+					<Link href={"/"} className="w-3/5 col-span-2 cursor-pointer flex items-center">
 						<Image
 							src={"/logo.svg"}
 							width={100}
 							height={100}
-							className="w-[45%] sm:w-[35%] lg:w-full"
+							className="w-[45%] sm:w-[25%] lg:w-[65%]"
 							alt="goodjob"
 						/>
 					</Link>
@@ -50,16 +50,15 @@ const Navbar = () => {
 							Contact
 						</Link>
 					</div>
-					<div className="col-span-1 flex justify-end items-center gap-3 max-lg:hidden">
+					<div className="col-span-2 flex justify-end items-center gap-3 max-lg:hidden">
 						<ButtonSearch />
 						<SkeletonProvider
-							skeleton={<Skeleton className="h-full w-[70%]" />}
+							skeleton={<Skeleton className="h-full w-[45%] p-4" />}
 							duration={1000}
-						>
-							<UserControl />
-						</SkeletonProvider>
+							children={<UserControl />}
+						/>
 					</div>
-					<div className="col-span-1 hidden justify-end items-center gap-3 max-lg:flex">
+					<div className="col-span-1 hidden justify-end items-center max-sm:gap-1 gap-3 max-lg:flex">
 						<ButtonSearch />
 						<UserlControlResponsive />
 					</div>

@@ -1,12 +1,12 @@
 "use client";
 
-import { NavbarSearchState } from "@/lib/hooks/navbar_search.ui";
+import { FilterJob } from "@/lib/hooks/navbar_search.ui";
 import { ScrollVerticalState } from "@/lib/hooks/scroll_vertical.ui";
 import React, { ReactNode, useEffect, useState } from "react";
 
 const StickNavbar = ({ children, className }: { children: ReactNode; className: string }) => {
 	const { scroll, scrollHeight, setScroll } = ScrollVerticalState();
-	const { isOpen } = NavbarSearchState();
+	const { isOpen } = FilterJob();
 	useEffect(() => {
 		const handleScroll = () => {
 			setScroll(window.scrollY, window.document.body.scrollHeight - window.innerHeight);

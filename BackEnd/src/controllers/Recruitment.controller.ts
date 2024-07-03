@@ -6,7 +6,7 @@ class RecruitmentController {
 	static async getAllRecruitments(req: Request, res: Response) {
 		return new API_Response({
 			message: "Get recruitments successfully",
-			metadata: await Recruitment.getAll(),
+			metadata: await Recruitment.getAll(req.query),
 		}).send(res);
 	}
 

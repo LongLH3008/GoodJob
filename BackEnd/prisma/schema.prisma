@@ -136,12 +136,14 @@ model Company {
   establish   String        @db.VarChar(4)
   size        Int
   business    String        @db.VarChar(50)
-  introduce   String?       @db.VarChar(500)
+  introduce   String?       @db.VarChar(1000)
   taxcode     String        @db.VarChar(14)
   license     String        @db.VarChar(255)
   check       String?       @default("0") @db.Bit(1)
   createAt    DateTime?     @default(now())
   updateAt    DateTime?     @db.Timestamptz(6)
+  address     String?
+  avatar      String?
   User        User          @relation(fields: [employer_id], references: [id], onDelete: Cascade)
   Recruitment Recruitment[]
   Reviews     Reviews[]
@@ -205,11 +207,11 @@ model Order {
 model Recruitment {
   id                      String                    @id
   company_id              String
-  job                     String                    @db.VarChar(14)
+  job                     String                    @db.VarChar(100)
   salary                  String                    @db.VarChar(30)
-  benefits                String?                   @db.VarChar(300)
-  describe                String?                   @db.VarChar(300)
-  require                 String?                   @db.VarChar(300)
+  benefits                String?                   @db.VarChar(500)
+  describe                String?                   @db.VarChar(500)
+  require                 String?                   @db.VarChar(500)
   end                     DateTime                  @db.Date
   recr_status             recr_status_t?            @default(Recruiting)
   createAt                DateTime?                 @default(now())
@@ -219,6 +221,8 @@ model Recruitment {
   profession              String
   position                recr_position_t           @default(Employee)
   exp                     String
+  slot                    Int?
+  location                String?
   Company                 Company                   @relation(fields: [company_id], references: [id], onDelete: Cascade)
   Recruitment_Information Recruitment_Information[]
 

@@ -3,16 +3,17 @@
 import React from "react";
 import { Button } from "../ui/button";
 import { RotateCcw, Search, X } from "lucide-react";
-import { NavbarSearchState } from "@/lib/hooks/navbar_search.ui";
+import { FilterJob } from "@/lib/hooks/navbar_search.ui";
 import { ScrollVerticalState } from "@/lib/hooks/scroll_vertical.ui";
 import FilterSelect from "./navbar.search.filter";
 import { Input } from "../ui/input";
 import * as constanst from "@/lib/constants";
+import Link from "next/link";
 
 type Props = {};
 
 export const ButtonSearch = () => {
-	const { toggleSearch } = NavbarSearchState();
+	const { toggleSearch } = FilterJob();
 	return (
 		<Button
 			onClick={() => toggleSearch()}
@@ -24,7 +25,7 @@ export const ButtonSearch = () => {
 };
 
 export const NavSearch = (props: Props) => {
-	const search = NavbarSearchState();
+	const search = FilterJob();
 	const { scroll } = ScrollVerticalState();
 
 	return (
@@ -35,7 +36,7 @@ export const NavSearch = (props: Props) => {
 			res_layout pt-[5%] max-sm:pt-[15%] max-lg:pt-[10%] h-fit fixed transition-all ease-in-out duration-500 w-full bg-white rounded-br-3xl rounded-bl-3xl border-b shadow-2xl`}
 		>
 			<div className="flex flex-col gap-3 pb-32 relative w-full">
-				<p className="text-2xl my-5 text-center max-md:text-lg">Find your job</p>
+				{/* <p className="text-2xl my-5 text-center max-md:text-lg">Find your job</p> */}
 				<div className="grid grid-cols-4 gap-3 max-lg:text-sm max-lg:grid-cols-3 max-sm:grid-cols-2">
 					<Input
 						onChange={(e) => search.setFilter("job", e.target.value)}
@@ -92,9 +93,12 @@ export const NavSearch = (props: Props) => {
 							>
 								<RotateCcw strokeWidth={1.25} />
 							</Button>
-							<Button className="hover:bg-primary hover:scale-110 transition-all rounded-r-full h-16 w-16 shadow-3xl">
+							<Link
+								href={"/job"}
+								className="flex items-center justify-center bg-primary text-white hover:bg-primary hover:scale-110 transition-all rounded-r-full h-16 w-16 shadow-3xl"
+							>
 								<Search strokeWidth={1.25} />
-							</Button>
+							</Link>
 						</>
 					)}
 				</div>
