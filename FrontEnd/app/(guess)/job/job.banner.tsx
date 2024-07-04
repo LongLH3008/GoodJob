@@ -1,7 +1,7 @@
 "use client";
 import FilterSelect from "@/components/reuse/navbar.search.filter";
 import { Input } from "@/components/ui/input";
-import { FilterJob } from "@/lib/hooks/navbar_search.ui";
+import { FilterJob } from "@/app/(guess)/job/state";
 import * as constanst from "@/lib/constants";
 import { CalendarDays, Gem, Newspaper, Search, Slash } from "lucide-react";
 import React from "react";
@@ -13,12 +13,11 @@ const JobBanner = (props: Props) => {
 
 	return (
 		<div
-			style={{ backgroundImage: "url('/banner_bg.png')" }}
-			className="res_layout h-fit  bg-cover bg-fixed flex flex-col justify-center items-center gap-5 py-10 lg:py-5"
+			// style={{ backgroundImage: "url('/banner_bg.png')" }}
+			className="res_layout h-fit bg-gradient-to-b from-zinc-400 to-zinc-100 flex flex-col justify-center items-center gap-5 py-10"
 		>
-			<p className="text-3xl text-center w-full font-sans ">
-				Explore amazing <span className="text-[#ff9c00] font-semibold">career opportunities</span> with
-				us!{" "}
+			<p className="text-2xl text-center w-full font-sans font-[350]">
+				Explore amazing <span className="font-[500]">career opportunities</span> with us!{" "}
 			</p>
 			<div className={`w-full`}>
 				<div className="flex flex-col gap-3 w-full">
@@ -94,7 +93,7 @@ const JobBanner = (props: Props) => {
 					</div> */}
 				</div>
 			</div>
-			<div className="flex justify-between items-center w-1/2 text-sm max-2xl:w-3/4 max-md:w-full max-sm:hidden">
+			<div className="flex justify-between items-center w-1/2 text-zinc-500 text-[13px] max-2xl:w-3/4 max-md:w-full max-sm:hidden">
 				<div className="flex items-center gap-3 bg-white shadow-md p-2 px-4 rounded-full">
 					<CalendarDays className="text-[#ff9c00]" strokeWidth={1.25} />
 					{new Date().toLocaleDateString("vi-VN")}

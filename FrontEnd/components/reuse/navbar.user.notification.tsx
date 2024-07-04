@@ -52,7 +52,7 @@ export function Notification() {
 		<DropdownMenu modal>
 			<DropdownMenuTrigger className="cursor-pointer bg-transparent rounded-full" asChild>
 				<Button className="p-2 relative bg-transparent rounded-md text-primary hover:text-white hover:bg-primary hover_navbtn">
-					<Bell strokeWidth={1.25} />
+					<Bell strokeWidth={1} />
 					<span className="absolute top-1 right-1 flex h-2 w-2">
 						<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff9c00] opacity-75"></span>
 						<span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff9c00]"></span>

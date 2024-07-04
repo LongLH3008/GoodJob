@@ -24,7 +24,7 @@ const Navbar = () => {
 							alt="goodjob"
 						/>
 					</Link>
-					<div className="max-lg:hidden col-span-3 flex justify-center items-center gap-2">
+					<div className="max-lg:hidden text-sm uppercase text-zinc-700 col-span-3 flex justify-center items-center gap-2">
 						<Link
 							href={"/job"}
 							className="hover_navlink hover:text-white rounded-md p-3 px-4 xl:px-7"

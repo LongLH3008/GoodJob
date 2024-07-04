@@ -27,7 +27,7 @@ const LoginPage = () => {
 				action: <LockOpen strokeWidth={1.25} color="#ff9c00" />,
 				duration: 5000,
 			});
-			router.push("/");
+			router.push("/dashboard");
 		},
 		onError: (error) => {
 			toast({

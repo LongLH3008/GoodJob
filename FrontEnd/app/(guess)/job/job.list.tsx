@@ -1,16 +1,9 @@
 "use client";
 import SkeletonProvider from "@/components/reuse/skeleton";
-import {
-	Pagination,
-	PaginationContent,
-	PaginationItem,
-	PaginationLink,
-	PaginationPrevious,
-} from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
-import { FilterJob } from "@/lib/hooks/navbar_search.ui";
+import { FilterJob } from "@/app/(guess)/job/state";
 import { SwrFetcher } from "@/lib/hooks/swr";
-import { ChevronLeft, ChevronRight, History, MapPin } from "lucide-react";
+import { ChevronLeft, ChevronRight, History, MapPin, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -19,8 +12,8 @@ import useSWR from "swr";
 type Props = {};
 
 const ListJobs = (props: Props) => {
-	const [page, setPage] = useState(1);
 	const { isChange } = FilterJob();
+	const [page, setPage] = useState(1);
 	const [limit, setLimit] = useState("12");
 	useEffect(() => {
 		const a = () => {
@@ -32,7 +25,6 @@ const ListJobs = (props: Props) => {
 		};
 	}, []);
 	const { data } = useSWR(`/recr?page=${page}&limit=${limit}&order=desc`, SwrFetcher);
-	console.log(page);
 
 	const nextPage = () => {
 		if (page < Math.ceil(data?.metadata.total / parseInt(limit))) setPage(page + 1);
@@ -44,7 +36,7 @@ const ListJobs = (props: Props) => {
 
 	return (
 		<div className={`py-5 border-y ${isChange ? "hidden" : "block"} border-zinc-300 `}>
-			<p className="text-lg font-normal font-sans my-5">Best job for you</p>
+			<p className="text-lg text-zinc-600 mb-5">Best job for you</p>
 			<div className="grid grid-cols-3 gap-3 max-lg:grid-cols-2 max-[700px]:grid-cols-1">
 				{data?.metadata.recr_list.map((item: any) => (
 					<SkeletonProvider
@@ -66,9 +58,17 @@ const ListJobs = (props: Props) => {
 							</div>
 						}
 						children={
-							<div className="col-span-1 h-32 p-3 rounded-lg flex justify-between gap-4 items-center bg-white shadow-sm">
+							<div className="relative col-span-1 h-32 p-3 rounded-lg flex justify-between gap-4 items-center bg-white shadow-sm">
+								{item.recommended == "1" && (
+									<Star
+										color="#ff9c00"
+										strokeWidth={3}
+										size={16}
+										className="absolute right-1 top-1"
+									/>
+								)}
 								<Link
-									href={`/job/${item.id}`}
+									href={`/job/${item.slug}`}
 									className="w-[100px] h-[100px] overflow-hidden flex items-center justify-center"
 								>
 									<Image
@@ -80,7 +80,7 @@ const ListJobs = (props: Props) => {
 									/>
 								</Link>
 								<div className="h-full w-3/4 flex flex-col justify-between items-start">
-									<Link href={`/job/${item.id}`} className="leading-4 text-sm">
+									<Link href={`/job/${item.slug}`} className="leading-4 text-sm">
 										{item.job} <br />{" "}
 										<span className="text-[11px] uppercase text-zinc-500">
 											{item.Company.name}

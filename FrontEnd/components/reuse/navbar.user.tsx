@@ -84,7 +84,7 @@ export function UserControl() {
 						href="cv-services"
 						className="p-2 bg-transparent rounded-md text-primary hover:text-white hover_navbtn hover:border-primary"
 					>
-						<PackagePlus strokeWidth={1.25} />
+						<PackagePlus strokeWidth={1} />
 					</Link>
 					<Notification />
 					<Link
@@ -95,7 +95,7 @@ export function UserControl() {
 							<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff9c00] opacity-75"></span>
 							<span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff9c00]"></span>
 						</span>
-						<MessagesSquare strokeWidth={1.25} />
+						<MessagesSquare strokeWidth={1} />
 					</Link>
 					<DropdownMenu>
 						<DropdownMenuTrigger className="cursor-pointer z-30" asChild>
@@ -114,47 +114,62 @@ export function UserControl() {
 							</div>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end" className="w-56">
-							<DropdownMenuLabel>My Account</DropdownMenuLabel>
+							<DropdownMenuLabel className="text-[13px]">My Account</DropdownMenuLabel>
 							<DropdownMenuSeparator />
 							<DropdownMenuGroup>
 								<DropdownMenuItem className="py-0">
 									<Link
-										className="flex items-center w-full h-full py-2"
+										className="flex items-center w-full h-full py-2 text-sm"
 										href={`/applicant-profile/${isLogged}`}
 									>
-										<User className="mr-2 h-4 w-4" />
-										<span>Profile</span>
+										<User className="mr-2 h-4 w-4" strokeWidth={1.25} />
+										<span className="text-[13px]">Profile</span>
 									</Link>
 								</DropdownMenuItem>
 								<DropdownMenuItem className="py-0">
-									<Link href={"/"} className="flex items-center w-full h-full py-2">
-										<ShoppingBag className="mr-2 h-4 w-4" />
-										<span>Order</span>
+									<Link
+										href={"/"}
+										className="flex items-center w-full h-full py-2 text-sm"
+									>
+										<ShoppingBag className="mr-2 h-4 w-4" strokeWidth={1.25} />
+										<span className="text-[13px]">Order</span>
 									</Link>
 								</DropdownMenuItem>
 								<DropdownMenuItem className="py-0">
-									<Link href={"/"} className="flex items-center w-full h-full py-2">
-										<SquarePen className="mr-2 h-4 w-4" />
-										<span>CV</span>
+									<Link
+										href={"/"}
+										className="flex items-center w-full h-full py-2 text-sm"
+									>
+										<SquarePen className="mr-2 h-4 w-4" strokeWidth={1.25} />
+										<span className="text-[13px]">CV</span>
 									</Link>
 								</DropdownMenuItem>
 								<DropdownMenuItem className="py-0">
-									<Link href={"/"} className="flex items-center w-full h-full py-2">
-										<ClipboardCopy className="mr-2 h-4 w-4" />
-										<span>Applied Jobs</span>
+									<Link
+										href={"/"}
+										className="flex items-center w-full h-full py-2 text-sm"
+									>
+										<ClipboardCopy
+											className="mr-2 h-4 w-4"
+											strokeWidth={1.25}
+										/>
+										<span className="text-[13px]">Applied Jobs</span>
 									</Link>
 								</DropdownMenuItem>
 							</DropdownMenuGroup>
 							<DropdownMenuSeparator />
 							<DropdownMenuItem className="py-0">
-								<Link href={"/"} className="flex items-center w-full h-full py-2">
-									<KeyRound className="mr-2 h-4 w-4" />
-									<span>Change Password</span>
+								<Link
+									href={"/"}
+									className="flex items-center w-full h-full py-2 text-sm"
+								>
+									<KeyRound className="mr-2 h-4 w-4" strokeWidth={1.25} />
+									<span className="text-[13px]">Change Password</span>
 								</Link>
 							</DropdownMenuItem>
 							<DropdownMenuItem onClick={() => Logout()}>
-								<LogOut className="mr-2 h-4 w-4" />
-								<span>Log out</span>
+								<LogOut className="mr-2 h-4 w-4" strokeWidth={1.25} />
+								<span className="text-[13px]">Log out</span>
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>

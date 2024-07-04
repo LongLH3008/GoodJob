@@ -3,7 +3,7 @@
 import React from "react";
 import { Button } from "../ui/button";
 import { RotateCcw, Search, X } from "lucide-react";
-import { FilterJob } from "@/lib/hooks/navbar_search.ui";
+import { FilterJob } from "@/app/(guess)/job/state";
 import { ScrollVerticalState } from "@/lib/hooks/scroll_vertical.ui";
 import FilterSelect from "./navbar.search.filter";
 import { Input } from "../ui/input";
@@ -19,7 +19,7 @@ export const ButtonSearch = () => {
 			onClick={() => toggleSearch()}
 			className="p-2 bg-transparent rounded-md text-primary hover:text-white hover:bg-primary hover_navbtn"
 		>
-			<Search strokeWidth={1.25} />
+			<Search strokeWidth={1} />
 		</Button>
 	);
 };

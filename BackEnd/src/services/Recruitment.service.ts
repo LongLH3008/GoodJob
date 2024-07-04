@@ -92,6 +92,8 @@ class Recruitment {
 				end: true,
 				salary: true,
 				location: true,
+				slug: true,
+				recommended: true,
 				Company: { select: { avatar: true, name: true } },
 			},
 		});
@@ -100,9 +102,11 @@ class Recruitment {
 		return { recr_list, total };
 	}
 
-	static async get(id: UID) {
+	static async get(id: string) {
 		const recr = await prisma.recruitment.findFirst({
-			where: { id },
+			where: {
+				OR: [{ id }, { slug: id }],
+			},
 			include: {
 				Recruitment_Information: {
 					select: {
@@ -139,7 +143,13 @@ class Recruitment {
 		const isExsit = await prisma.recruitment.findFirst({ where: { company_id, job } });
 		if (isExsit) throw new API_Error("This recr already exists", StatusCode.UNAUTHORIZED);
 		return await prisma.recruitment.create({
-			data: { ...dt, id: generateUUID(), recr_status: "Recruiting", end: generateIOSTime(dt.end) },
+			data: {
+				...dt,
+				id: generateUUID(),
+				slug: dt.name.replace(" ", "-"),
+				recr_status: "Recruiting",
+				end: generateIOSTime(dt.end),
+			},
 		});
 	}
 
@@ -152,7 +162,12 @@ class Recruitment {
 		if (isExsit) throw new API_Error("This recr already exists", StatusCode.UNAUTHORIZED);
 		return await prisma.recruitment.update({
 			where: { id, company_id },
-			data: { ...dt, updateAt: generateIOSTime(), end: generateIOSTime(dt.end) },
+			data: {
+				...dt,
+				slug: dt.name.replace(" ", "-"),
+				updateAt: generateIOSTime(),
+				end: generateIOSTime(dt.end),
+			},
 		});
 	}
 

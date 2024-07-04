@@ -6,7 +6,14 @@ class CompanyController {
 	static async getAllCompany(req: Request, res: Response) {
 		return new API_Response({
 			message: "Get all company successfully",
-			metadata: await Company.getAll(),
+			metadata: await Company.getAll(req.query),
+		}).send(res);
+	}
+
+	static async getOutstandingCompany(req: Request, res: Response) {
+		return new API_Response({
+			message: "Get all company successfully",
+			metadata: await Company.getAllOutstanding(),
 		}).send(res);
 	}
 
