@@ -144,11 +144,13 @@ model Company {
   updateAt    DateTime?     @db.Timestamptz(6)
   address     String?
   avatar      String?
+  slug        String?       @db.VarChar
   User        User          @relation(fields: [employer_id], references: [id], onDelete: Cascade)
   Recruitment Recruitment[]
   Reviews     Reviews[]
 
   @@index([name, id, employer_id], map: "name_id_employer_id_index")
+  @@index([slug], map: "index_company_slug")
 }
 
 model Conversation {
@@ -223,11 +225,13 @@ model Recruitment {
   exp                     String
   slot                    Int?
   location                String?
+  slug                    String?                   @db.VarChar
   Company                 Company                   @relation(fields: [company_id], references: [id], onDelete: Cascade)
   Recruitment_Information Recruitment_Information[]
 
   @@index([company_id, id], map: "company_id_id_index")
   @@index([end], map: "idx_recruitment_end")
+  @@index([slug], map: "index_recruitment_slug")
 }
 
 model Recruitment_Information {

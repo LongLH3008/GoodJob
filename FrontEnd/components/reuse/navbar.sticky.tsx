@@ -1,6 +1,6 @@
 "use client";
 
-import { FilterJob } from "@/lib/hooks/navbar_search.ui";
+import { FilterJob } from "@/app/(guess)/job/state";
 import { ScrollVerticalState } from "@/lib/hooks/scroll_vertical.ui";
 import React, { ReactNode, useEffect, useState } from "react";
 

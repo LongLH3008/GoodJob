@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { Check, ChevronsUpDown, CirclePlus } from "lucide-react";
 import { ScrollArea } from "../ui/scroll-area";
-import { FilterJob, Search } from "@/lib/hooks/navbar_search.ui";
+import { FilterJob, Search } from "@/app/(guess)/job/state";
 
 const FilterSelect = ({
 	data,
@@ -31,7 +31,7 @@ const FilterSelect = ({
 					aria-expanded={open}
 					className={cn(`justify-between shadow-md border-none capitalize ${className}`)}
 				>
-					<div className="flex max-lg:gap-3 gap-5 max-md:text-[13px] items-center overflow-hidden">
+					<div className="flex max-lg:gap-3 gap-5 max-md:text-[13px] text-zinc-500 text-[13px] items-center overflow-hidden">
 						<CirclePlus className="text-zinc-500 max-sm:hidden" strokeWidth={1.25} />
 						{label} :{" "}
 						{search.dataFilter[`${keyFilter}`] !== ""

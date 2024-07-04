@@ -7,6 +7,7 @@ const router = Router();
 
 // COMPANY
 router.get("/company", Async(CompanyController.getAllCompany));
+router.get("/outstanding_company", Async(CompanyController.getOutstandingCompany));
 router.post("/company", Async(CompanyController.createCompany));
 router.get("/company/:id", Async(CompanyController.getCompany));
 router.put("/company/:id", Async(CompanyController.updateCompany));

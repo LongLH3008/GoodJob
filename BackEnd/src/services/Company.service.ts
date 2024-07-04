@@ -54,15 +54,73 @@ class Company {
 		return true;
 	}
 
-	static async getAll() {
-		const companies = await prisma.company.findMany();
+	static async getAllOutstanding() {
+		const companies = await prisma.company.findMany({
+			orderBy: { createAt: "desc" },
+			select: {
+				id: true,
+				name: true,
+				introduce: true,
+				size: true,
+				avatar: true,
+				business: true,
+				_count: {
+					select: {
+						Reviews: {
+							where: { OR: [{ vote: "Very_Good" }, { vote: "Good" }] },
+						},
+						Recruitment: true,
+					},
+				},
+				slug: true,
+			},
+		});
 		if (!companies.length) throw new API_Error("There are no company", StatusCode.NOT_FOUND);
-		return companies;
+		const filter = companies
+			.filter((item) => item._count.Reviews > 0)
+			.sort((a, b) => b._count.Reviews - a._count.Reviews);
+		return filter.slice(0, 5);
 	}
 
-	static async get(id: UID) {
+	static async getAll(filter?: any) {
+		const { page, limit } = filter;
+		const amount = parseInt(limit) || 6;
+		const skip = (page - 1) * amount;
+		const total = await prisma.company.count({
+			where: { name: { contains: filter.name }, address: { contains: filter.location } },
+		});
+		const companies = await prisma.company.findMany({
+			where: { name: { contains: filter.name }, address: { contains: filter.location }, Reviews: {} },
+			orderBy: { createAt: filter.order },
+			take: amount,
+			skip,
+			select: {
+				id: true,
+				name: true,
+				introduce: true,
+				size: true,
+				avatar: true,
+				business: true,
+				_count: {
+					select: {
+						Reviews: {
+							where: { OR: [{ vote: "Very_Good" }, { vote: "Good" }] },
+						},
+						Recruitment: true,
+					},
+				},
+				slug: true,
+			},
+		});
+		if (!companies.length) throw new API_Error("There are no company", StatusCode.NOT_FOUND);
+		return { companies, total };
+	}
+
+	static async get(id: string) {
 		const company = await prisma.company.findFirst({
-			where: { id },
+			where: {
+				OR: [{ id }, { slug: id }],
+			},
 			include: { Recruitment: true, Reviews: true },
 		});
 		if (!company) throw new API_Error("Company not found", StatusCode.NOT_FOUND);
@@ -86,6 +144,7 @@ class Company {
 				...dt,
 				id: generateUUID(),
 				check: "0",
+				slug: dt.name.replace(" ", "-"),
 			},
 		});
 	}
@@ -99,7 +158,11 @@ class Company {
 		// const result = await this.checkTaxCode(taxcode);
 		return await prisma.company.update({
 			where: { id },
-			data: { ...dt, updateAt: generateIOSTime() },
+			data: {
+				...dt,
+				slug: dt.name.replace(" ", "-"),
+				updateAt: generateIOSTime(),
+			},
 		});
 	}
 }

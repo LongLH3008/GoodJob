@@ -2,9 +2,9 @@
 import SkeletonProvider from "@/components/reuse/skeleton";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { FilterJob } from "@/lib/hooks/navbar_search.ui";
+import { FilterJob } from "@/app/(guess)/job/state";
 import { SwrFetcher } from "@/lib/hooks/swr";
-import { ChevronLeft, ChevronRight, FilterX, Frown, History, MapPin } from "lucide-react";
+import { ChevronLeft, ChevronRight, FilterX, Frown, History, MapPin, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -45,7 +45,7 @@ const ResultFilterJobs = (props: Props) => {
 		if (page > 0) setPage(page - 1);
 	};
 
-	const { data } = useSWR(`/recr?page=${page}&order=desc&limit=${limit}`, SwrFetcher);
+	const { data } = useSWR(`/recr?page=${page}&order=desc&limit=${limit}${filter}`, SwrFetcher);
 	return (
 		<div className={`py-10 ${isChange ? "block" : "hidden"} `}>
 			<div className="w-full flex justify-between items-center mb-5">
@@ -81,9 +81,17 @@ const ResultFilterJobs = (props: Props) => {
 								</div>
 							}
 							children={
-								<div className="col-span-1 h-32 p-3 rounded-lg flex justify-between gap-4 items-center bg-white shadow-sm">
+								<div className="relative col-span-1 h-32 p-3 rounded-lg flex justify-between gap-4 items-center bg-white shadow-sm">
+									{item.recommended == "1" && (
+										<Star
+											color="#ff9c00"
+											strokeWidth={3}
+											size={16}
+											className="absolute right-1 top-1"
+										/>
+									)}
 									<Link
-										href={`/job/${item.id}`}
+										href={`/job/${item.slug}`}
 										className="w-[100px] h-[100px] overflow-hidden flex items-center justify-center"
 									>
 										<Image
@@ -96,7 +104,7 @@ const ResultFilterJobs = (props: Props) => {
 									</Link>
 									<div className="h-full w-3/4 flex flex-col justify-between items-start">
 										<Link
-											href={`/job/${item.id}`}
+											href={`/job/${item.slug}`}
 											className="leading-4 text-sm"
 										>
 											{item.job} <br />{" "}
