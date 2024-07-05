@@ -17,7 +17,6 @@ type Props = {};
 const BannerCompanyPage = (props: Props) => {
 	const { setSearch, resetSearch, companySearch } = CompanySearchState();
 	const [open, setOpen] = React.useState(false);
-	console.log(CompanySearchState());
 	return (
 		<div className="res_layout w-full h-56 bg-gradient-to-b from-orange-100	 from-20% to-zinc-100 flex justify-center items-center">
 			<div className="flex flex-col gap-3 w-1/2 max-xl:w-3/4 max-md:w-full">

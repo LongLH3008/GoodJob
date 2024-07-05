@@ -109,7 +109,7 @@ export function UserControl() {
 											: "/user.png"
 									}
 									alt="Description of my image"
-									className="h-full w-full object-cover"
+									className="w-full h-auto object-cover"
 								/>
 							</div>
 						</DropdownMenuTrigger>

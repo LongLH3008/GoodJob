@@ -82,6 +82,9 @@ class Recruitment {
 				page: undefined,
 				limit: undefined,
 				order: undefined,
+				recr_status: "Recruiting",
+
+				id: { not: filter.id },
 			},
 			take: amount,
 			skip,
@@ -112,10 +115,19 @@ class Recruitment {
 					select: {
 						id: true,
 						recr_info_status: true,
-						CV: true,
-						CV_import: true,
+						CV: {
+							select: {
+								applicant_id: true,
+							},
+						},
+						CV_import: {
+							select: {
+								applicant_id: true,
+							},
+						},
 					},
 				},
+				Company: { select: { avatar: true, name: true, slug: true } },
 			},
 		});
 		if (!recr) throw new API_Error("Recruitment not found", StatusCode.NOT_FOUND);

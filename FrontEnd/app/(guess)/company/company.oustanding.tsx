@@ -12,14 +12,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 
-type Props = {};
-
 const OutsandingCompany = () => {
 	const { isChange } = CompanySearchState();
 	const plugin = React.useRef(Autoplay({ delay: 5000, stopOnInteraction: false }));
 
 	const { data } = useSWR("/outstanding_company", SwrFetcher);
-	console.log(data);
 
 	return (
 		<div className={`${isChange && "hidden"}  res_layout bg-zinc-100 py-10`}>
@@ -54,7 +51,7 @@ const OutsandingCompany = () => {
 												height={100}
 												alt={item.name}
 												quality={75}
-												className="w-full h-full object-cover"
+												className="w-full h-auto object-cover"
 											/>
 										</Link>
 										<Link

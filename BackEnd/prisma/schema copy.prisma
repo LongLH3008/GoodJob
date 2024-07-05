@@ -136,7 +136,7 @@ model Company {
   establish   String        @db.VarChar(4)
   size        Int
   business    String        @db.VarChar(50)
-  introduce   String?       @db.VarChar(500)
+  introduce   String?       @db.VarChar(1000)
   taxcode     String        @db.VarChar(14)
   license     String        @db.VarChar(255)
   check       String?       @default("0") @db.Bit(1)
@@ -144,11 +144,13 @@ model Company {
   updateAt    DateTime?     @db.Timestamptz(6)
   address     String?
   avatar      String?
+  slug        String?       @db.VarChar
   User        User          @relation(fields: [employer_id], references: [id], onDelete: Cascade)
   Recruitment Recruitment[]
   Reviews     Reviews[]
 
   @@index([name, id, employer_id], map: "name_id_employer_id_index")
+  @@index([slug], map: "index_company_slug")
 }
 
 model Conversation {
@@ -207,7 +209,7 @@ model Order {
 model Recruitment {
   id                      String                    @id
   company_id              String
-  job                     String                    @db.VarChar(14)
+  job                     String                    @db.VarChar(100)
   salary                  String                    @db.VarChar(30)
   benefits                String?                   @db.VarChar(500)
   describe                String?                   @db.VarChar(500)
@@ -222,11 +224,14 @@ model Recruitment {
   position                recr_position_t           @default(Employee)
   exp                     String
   slot                    Int?
+  location                String?
+  slug                    String?                   @db.VarChar
   Company                 Company                   @relation(fields: [company_id], references: [id], onDelete: Cascade)
   Recruitment_Information Recruitment_Information[]
 
   @@index([company_id, id], map: "company_id_id_index")
   @@index([end], map: "idx_recruitment_end")
+  @@index([slug], map: "index_recruitment_slug")
 }
 
 model Recruitment_Information {
