@@ -24,7 +24,8 @@ const HomeBanner = (props: Props) => {
 						width={50}
 						height={50}
 						alt="goodjob"
-						className="-translate-y-1/2"
+						priority
+						className="-translate-y-1/2 w-14 h-auto"
 					/>
 					<blockquote className="text-primary lg:leading-5 max-lg:text-[11px] text-sm p-3 px-5 w-fit bg-white rounded-2xl rounded-tl-none">
 						"APPLY FOR YOUR DREAM JOB <br />

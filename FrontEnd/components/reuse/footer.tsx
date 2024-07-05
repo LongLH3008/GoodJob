@@ -11,7 +11,7 @@ function Footer() {
 		<>
 			<StickyFooter className="hidden lg:block">
 				<div className="flex flex-col gap-5 justify-end items-center">
-					<Image src={Logo} width={200} height={100} alt="logo" />
+					<Image src={Logo} width={200} height={100} className="w-52 h-auto" alt="logo" />
 					<div className="w-2/5 gap-10 flex justify-between items-start py-3">
 						<ul className="text-[11px] max-sm:text-sm flex flex-col gap-2">
 							<li className="font-semibold text-[13px] mb-2">About</li>
@@ -120,8 +120,20 @@ function Footer() {
 					<div className="text-[10px] flex gap-3 items-center mt-5">
 						Made from{" "}
 						<a className="flex items-center gap-2" target="_blank" href="https://nextjs.org/">
-							<Image src={NextFavicon} width={15} height={100} alt="logo" />
-							<Image src={NextLogo} width={40} height={100} alt="logo" />
+							<Image
+								src={NextFavicon}
+								width={15}
+								height={100}
+								className="w-4 h-auto"
+								alt="logo"
+							/>
+							<Image
+								src={NextLogo}
+								width={40}
+								height={100}
+								className="w-10 h-auto"
+								alt="logo"
+							/>
 						</a>
 						by{" "}
 						<a
@@ -249,8 +261,14 @@ function Footer() {
 				<div className="text-[10px] flex gap-3 items-center mt-5 max-sm:self-start">
 					Made from
 					<a className="flex items-center gap-2" target="_blank" href="https://nextjs.org/">
-						<Image src={NextFavicon} width={15} height={100} alt="logo" />
-						<Image src={NextLogo} width={40} height={100} alt="logo2" />
+						<Image
+							src={NextFavicon}
+							width={15}
+							height={100}
+							className="w-4 h-auto"
+							alt="logo"
+						/>
+						<Image src={NextLogo} width={40} height={100} className="w-10 h-auto" alt="logo2" />
 					</a>
 					by{" "}
 					<a

@@ -20,11 +20,11 @@ const Navbar = () => {
 							src={"/logo.svg"}
 							width={100}
 							height={100}
-							className="w-[45%] sm:w-[25%] lg:w-[65%]"
+							className="w-[45%] h-auto sm:w-[25%] lg:w-[65%]"
 							alt="goodjob"
 						/>
 					</Link>
-					<div className="max-lg:hidden text-sm uppercase text-zinc-700 col-span-3 flex justify-center items-center gap-2">
+					<div className="max-lg:hidden text-sm font-medium uppercase text-zinc-900 col-span-3 flex justify-center items-center gap-2">
 						<Link
 							href={"/job"}
 							className="hover_navlink hover:text-white rounded-md p-3 px-4 xl:px-7"

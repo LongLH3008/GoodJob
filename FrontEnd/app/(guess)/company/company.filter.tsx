@@ -61,7 +61,7 @@ const CompanyFilterList = (props: Props) => {
 			<div className="grid grid-cols-3 gap-3">
 				{data?.metadata.companies.length > 0 ? (
 					data?.metadata.companies.map((item: any) => (
-						<SkeletonProvider
+						<SkeletonProvider key={item.id}
 							skeleton={
 								<div className="bg-white shadow-sm col-span-1 rounded-lg flex flex-col justify-between items-center p-10 max-sm:p-5 gap-3">
 									<Skeleton className="w-28 h-28" />
@@ -85,7 +85,7 @@ const CompanyFilterList = (props: Props) => {
 											height={100}
 											alt={item.name}
 											quality={75}
-											className="w-full h-full object-cover"
+											className="w-full h-auto object-cover"
 										/>
 									</Link>
 									<Link

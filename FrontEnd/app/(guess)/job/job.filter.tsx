@@ -98,7 +98,7 @@ const ResultFilterJobs = (props: Props) => {
 											src={item.Company.avatar}
 											width={100}
 											height={100}
-											className="w-full h-full object-cover"
+											className="w-full h-auto object-cover"
 											alt="c"
 										/>
 									</Link>
