@@ -3,6 +3,8 @@ import Locals from "./Locals";
 import Middleware from "../middlewares";
 import Routes from "./Routes";
 import API_Response from "../utils/Api.response";
+import { createServer } from "http";
+import SocketIO from "./Socket-IO";
 
 class Express {
 	public express: Application;
@@ -29,10 +31,14 @@ class Express {
 		const port = Locals.config().PORT;
 		const host = Locals.config().APP_URL;
 
+		const server = createServer(this.express);
+		SocketIO.init(server);
+
 		// Run on port
-		this.express
-			.listen(port, () => console.log(`Server is running on port ${port} and host: ${host}`))
-			.on("error", (_error) => console.log("Error " + _error.message));
+		server.listen(port, () => console.log(`Server is running on port ${port} and host: ${host}`)).on(
+			"error",
+			(_error) => console.log("Error " + _error.message)
+		);
 	}
 }
 

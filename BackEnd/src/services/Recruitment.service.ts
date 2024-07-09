@@ -83,7 +83,6 @@ class Recruitment {
 				limit: undefined,
 				order: undefined,
 				recr_status: "Recruiting",
-
 				id: { not: filter.id },
 			},
 			take: amount,
@@ -95,6 +94,7 @@ class Recruitment {
 				end: true,
 				salary: true,
 				location: true,
+				company_id: true,
 				slug: true,
 				recommended: true,
 				Company: { select: { avatar: true, name: true } },

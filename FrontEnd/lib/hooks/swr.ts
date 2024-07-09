@@ -1,5 +1,6 @@
 import { mutate } from "swr";
 import { instance } from "../api/api";
+import { Logout } from "../api/auth";
 
 export const SwrFetcher = async (url: string) => {
 	try {
@@ -42,7 +43,10 @@ export const SwrExecute = async (
 
 		mutate(url, data.data, false);
 		return data.data;
-	} catch (error) {
+	} catch (error: any) {
+		if (error.response.data == "Please login first" || error.response.data == "Login expired") {
+			await Logout();
+		}
 		console.error("Execute error:", error);
 		throw error;
 	}

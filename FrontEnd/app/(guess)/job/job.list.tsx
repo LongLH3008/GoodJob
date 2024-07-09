@@ -11,7 +11,7 @@ import useSWR from "swr";
 
 type Props = {};
 
-const ListJobs = (props: Props) => {
+const ListJobs = ({ company_id }: { company_id?: string }) => {
 	const { isChange } = FilterJob();
 	const [page, setPage] = useState(1);
 	const [limit, setLimit] = useState("12");
@@ -24,7 +24,10 @@ const ListJobs = (props: Props) => {
 			window.removeEventListener("resize", a);
 		};
 	}, []);
-	const { data } = useSWR(`/recr?page=${page}&limit=${limit}&order=desc`, SwrFetcher);
+	const { data } = useSWR(
+		`/recr?page=${page}&limit=${limit}&order=desc${company_id ? "&company_id=" + company_id : ""}`,
+		SwrFetcher
+	);
 
 	const nextPage = () => {
 		if (page < Math.ceil(data?.metadata.total / parseInt(limit))) setPage(page + 1);
@@ -35,14 +38,14 @@ const ListJobs = (props: Props) => {
 	};
 
 	return (
-		<div className={`py-5 border-y ${isChange ? "hidden" : "block"} border-zinc-300 `}>
-			<p className="text-lg text-zinc-600 mb-5">Best job for you</p>
+		<div className={`py-5 ${isChange ? "hidden" : "block"} `}>
+			<p className="text-lg text-zinc-600 mb-5">Job list</p>
 			<div className="grid grid-cols-3 gap-3 max-lg:grid-cols-2 max-[700px]:grid-cols-1">
 				{data?.metadata.recr_list.map((item: any) => (
 					<SkeletonProvider
 						key={item.id}
 						skeleton={
-							<div className="col-span-1 h-32 p-3 rounded-lg flex justify-between gap-4 items-center bg-white shadow-sm">
+							<div className="col-span-1 h-32 p-3 rounded-lg flex justify-between gap-4 items-center bg-white shadow-md">
 								<Skeleton className="w-[100px] h-[100px]" />
 								<div className="h-full w-3/4 flex flex-col justify-between items-start">
 									<div className="leading-4 w-full">
@@ -58,7 +61,7 @@ const ListJobs = (props: Props) => {
 							</div>
 						}
 						children={
-							<div className="relative col-span-1 h-32 p-3 rounded-lg flex justify-between gap-4 items-center bg-white shadow-sm">
+							<div className="relative col-span-1 h-32 p-3 rounded-lg flex justify-between gap-4 items-center bg-white shadow-md">
 								{item.recommended == "1" && (
 									<Star
 										color="#ff9c00"

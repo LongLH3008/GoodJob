@@ -87,11 +87,7 @@ export function UserlControlResponsive() {
 								<>
 									<div className="shadow-sm flex items-center justify-center overflow-hidden rounded-full w-8 h-8">
 										<Image
-											src={
-												avatar !== ""
-													? (avatar as string)
-													: "./user.png"
-											}
+											src={avatar !== "" ? (avatar as string) : "/user.png"}
 											width={100}
 											height={100}
 											className="w-full h-full object-cover"

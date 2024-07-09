@@ -43,7 +43,7 @@ const RecommendedJobs = (props: Props) => {
 					<SkeletonProvider
 						key={item.id}
 						skeleton={
-							<div className="col-span-1 h-32 p-3 rounded-lg flex justify-between gap-4 items-center bg-white shadow-sm">
+							<div className="col-span-1 h-32 p-3 rounded-lg flex justify-between gap-4 items-center bg-white shadow-md">
 								<Skeleton className="w-[100px] h-[100px]" />
 								<div className="h-full w-3/4 flex flex-col justify-between items-start">
 									<div className="leading-4 w-full">
@@ -59,7 +59,7 @@ const RecommendedJobs = (props: Props) => {
 							</div>
 						}
 						children={
-							<div className="relative col-span-1 h-32 p-3 rounded-lg flex justify-between gap-4 items-center bg-white shadow-sm">
+							<div className="relative col-span-1 h-32 p-3 rounded-lg flex justify-between gap-4 items-center bg-white shadow-md">
 								{item.recommended == "1" && (
 									<Star
 										color="#ff9c00"

@@ -7,7 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { format } from "util";
-import { AtSign, CalendarIcon, Check, CircleCheckBig, Lock, RotateCcw, UnplugIcon, UserCheck } from "lucide-react";
+import { AtSign, CalendarIcon, Check, Lock, RotateCcw, UnplugIcon, UserCheck } from "lucide-react";
 import { Calendar } from "./Calendar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { province } from "@/lib/constants/location";
@@ -68,7 +68,7 @@ const Profile = () => {
 
 	const onSubmit = async (formdata: any) => {
 		setLoading(true);
-		console.log(UserState.getState().id);
+		console.log(UserState.getState().id, InfoState.getState().user_id);
 		let method = (InfoState.getState().user_id ? "PUT" : "POST") as RequestMethod;
 		formdata.birth = new Date(formdata.birth).toLocaleString("vi-VN").split(" ")[1];
 		if (file !== null) {
@@ -81,6 +81,7 @@ const Profile = () => {
 			await handleDeleteImage(InfoState.getState().avatar as string);
 			formdata.avatar = "";
 		}
+		if (formdata.avatar == null) formdata.avatar = "";
 		trigger({ method, formdata });
 	};
 

@@ -11,7 +11,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 type Props = {};
 
-const CompanyList = (props: Props) => {
+const CompanyList = ({ business }: { business?: string }) => {
+	console.log(business);
 	const { isChange } = CompanySearchState();
 	const [page, setPage] = useState(1);
 	const [limit, setLimit] = useState("12");
@@ -33,7 +34,10 @@ const CompanyList = (props: Props) => {
 		if (page > 0) setPage(page - 1);
 	};
 
-	const { data } = useSWR(`/company?page=${page}&limit=${limit}`, SwrFetcher);
+	const { data } = useSWR(
+		`/company?page=${page}&limit=${limit}${business ? "&business=" + business : ""}`,
+		SwrFetcher
+	);
 
 	return (
 		<div
@@ -41,7 +45,7 @@ const CompanyList = (props: Props) => {
 				isChange && "hidden"
 			} res_layout bg-gradient-to-b from-zinc-100 from-80% to-white pb-10`}
 		>
-			<p className="text-lg text-zinc-600 py-10 border-t">Companies</p>
+			<p className="text-lg text-zinc-600 py-10">{business && "Related"} Companies</p>
 			<div className="grid grid-cols-3 max-lg:grid-cols-2 max-[500px]:grid-cols-1 gap-3">
 				{data?.metadata.companies.map((item: any) => (
 					<SkeletonProvider
@@ -58,7 +62,7 @@ const CompanyList = (props: Props) => {
 							</div>
 						}
 						children={
-							<div className="relative bg-white shadow-sm col-span-1 rounded-lg flex flex-col justify-between items-center p-10 max-sm:p-5 gap-3">
+							<div className="relative bg-white shadow-md col-span-1 rounded-lg flex flex-col justify-between items-center p-10 max-sm:p-5 gap-3">
 								{item._count.Reviews > 0 && (
 									<span className="absolute right-1 top-1 bg-gradient-to-tr from-orange-200 from-2% via-orange-500 via-60% to-orange-200  rounded-md p-2 text-white grid place-items-center">
 										<Star strokeWidth={1.25} />
