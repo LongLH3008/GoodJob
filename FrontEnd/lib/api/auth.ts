@@ -9,6 +9,9 @@ export const Logout = async () => {
 		ContactState.getState().resetContact();
 	} catch (error: any) {
 		console.log(error);
+		UserState.getState().resetUser();
+		InfoState.getState().resetInfo();
+		ContactState.getState().resetContact();
 	}
 };
 

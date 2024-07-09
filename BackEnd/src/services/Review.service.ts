@@ -11,8 +11,12 @@ import User from "./User.service";
 class Review {
 	private static async checkApplicant(applicant_id: UID) {
 		const user = await User.get(applicant_id);
-		if (user.user_role !== "Applicant" || user.check !== "1") {
-			throw new API_Error("This user does not have permission", StatusCode.UNAUTHORIZED);
+		if (user.user_role !== "Applicant") {
+			throw new API_Error("You does not have permission", StatusCode.UNAUTHORIZED);
+		}
+
+		if (user.check !== "1") {
+			throw new API_Error("You need to provide your information first", StatusCode.UNAUTHORIZED);
 		}
 		return true;
 	}
@@ -50,7 +54,26 @@ class Review {
 
 	static async getReviewsByCompanyId(company_id: UID) {
 		await this.checkCompany(company_id);
-		const reviews = await prisma.reviews.findMany({ where: { company_id } });
+		const reviews = await prisma.reviews.findMany({
+			where: { company_id },
+			orderBy: { createAt: "desc" },
+			select: {
+				content: true,
+				createAt: true,
+				vote: true,
+				User: {
+					select: {
+						email: true,
+						User_Information: {
+							select: {
+								avatar: true,
+							},
+						},
+					},
+				},
+			},
+		});
+
 		if (!reviews.length) throw new API_Error("No reviews found", StatusCode.NOT_FOUND);
 		return reviews;
 	}

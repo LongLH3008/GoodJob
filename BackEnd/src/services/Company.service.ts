@@ -87,10 +87,19 @@ class Company {
 		const amount = parseInt(limit) || 6;
 		const skip = (page - 1) * amount;
 		const total = await prisma.company.count({
-			where: { name: { contains: filter.name }, address: { contains: filter.location } },
+			where: {
+				business: filter.business,
+				name: { contains: filter.name },
+				address: { contains: filter.location },
+			},
 		});
 		const companies = await prisma.company.findMany({
-			where: { name: { contains: filter.name }, address: { contains: filter.location }, Reviews: {} },
+			where: {
+				business: filter.business,
+				name: { contains: filter.name },
+				address: { contains: filter.location },
+				Reviews: {},
+			},
 			orderBy: { createAt: filter.order },
 			take: amount,
 			skip,
@@ -121,7 +130,37 @@ class Company {
 			where: {
 				OR: [{ id }, { slug: id }],
 			},
-			include: { Recruitment: true, Reviews: true },
+			include: {
+				Recruitment: {
+					select: {
+						id: true,
+						job: true,
+						end: true,
+						salary: true,
+						location: true,
+						slug: true,
+						recommended: true,
+					},
+				},
+				Reviews: {
+					orderBy: { createAt: "desc" },
+					select: {
+						content: true,
+						createAt: true,
+						vote: true,
+						User: {
+							select: {
+								email: true,
+								User_Information: {
+									select: {
+										avatar: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		});
 		if (!company) throw new API_Error("Company not found", StatusCode.NOT_FOUND);
 		company.createAt = generateLocaleTime(company.createAt);

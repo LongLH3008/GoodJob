@@ -9,7 +9,7 @@ type Props = {};
 export const metadata: Metadata = {
 	title: {
 		// Dynamic title if another page's title different with the default title
-		template: "%s | GoodJob",
+		template: `%s | GoodJob`,
 		default: "GoodJob",
 	},
 	description: "",

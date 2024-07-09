@@ -2,6 +2,7 @@ import { Router } from "express";
 import { Async } from "../utils/AsyncHandle";
 import CompanyController from "../controllers/Company.controller";
 import ReviewController from "../controllers/Review.controller";
+import { checkAuth } from "../utils/Authorization";
 
 const router = Router();
 
@@ -18,7 +19,7 @@ router.put("/company/uncheck/:id", Async(CompanyController.uncheckCompany));
 
 // REVIEW
 router.get("/review", Async(ReviewController.getAllReviews));
-router.post("/review", Async(ReviewController.createReview));
+router.post("/review", checkAuth(ReviewController.createReview, ["Applicant"]));
 router.get("/review/:id", Async(ReviewController.getReview));
 router.put("/review/:id", Async(ReviewController.updateReview));
 router.delete("/review/:id", Async(ReviewController.deleteReview));

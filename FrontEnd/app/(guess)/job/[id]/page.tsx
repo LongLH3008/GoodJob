@@ -4,6 +4,7 @@ import { SwrFetcher } from "@/lib/hooks/swr";
 import {
 	BriefcaseBusiness,
 	ClipboardCopy,
+	ExternalLink,
 	FlaskConical,
 	HandCoins,
 	History,
@@ -29,7 +30,7 @@ type Props = {};
 
 const JobDetail = (props: Props) => {
 	const { id } = useParams();
-	const user_id = UserState().id;
+	const { id: user_id, email } = UserState();
 	const { data, isLoading } = useSWR(`/recr/${id}`, SwrFetcher);
 	const job = data?.metadata;
 
@@ -64,10 +65,12 @@ const JobDetail = (props: Props) => {
 										<div>
 											<p className="text-xl">{job.job}</p>
 											<Link
+												target="_blank"
 												href={`/company/${job.Company.slug}`}
-												className="uppercase text-zinc-600 text-sm"
+												className="uppercase flex gap-2 text-zinc-600 text-sm"
 											>
-												{job.Company.name}
+												<ExternalLink size={16} strokeWidth={1.25} />
+												{job.Company.name}{" "}
 											</Link>
 										</div>
 										<div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 w-full gap-5 *:flex *:items-center *:gap-3 text-sm">
@@ -105,7 +108,7 @@ const JobDetail = (props: Props) => {
 													for the response
 												</Link>
 											) : (
-												<Button className="order-last text-center col-span-1 border hover:text-white border-zinc-400 text-primary hover:border-none bg-transparent hover_navlink gap-2">
+												<Button className="order-last text-center col-span-1 border hover:text-white border-zinc-400 text-primary hover:border-orange-400 bg-transparent hover_navlink gap-2">
 													Apply
 													<ClipboardCopy strokeWidth={1.25} />
 												</Button>
@@ -131,7 +134,7 @@ const JobDetail = (props: Props) => {
 														className="text-sm text-zinc-600 text-justify lg:leading-7 lg:w-4/5"
 														key={index}
 													>
-														{item.trim()}
+														{item !== "" ? item : <br />}
 													</p>
 												))}
 										</div>
@@ -146,7 +149,7 @@ const JobDetail = (props: Props) => {
 														className="text-sm text-zinc-600 text-justify lg:leading-7 lg:w-4/5"
 														key={index}
 													>
-														{item.trim()}
+														{item !== "" ? item : <br />}
 													</p>
 												))}
 										</div>
@@ -161,7 +164,7 @@ const JobDetail = (props: Props) => {
 														className="text-sm text-zinc-600 text-justify lg:leading-7 lg:w-4/5"
 														key={index}
 													>
-														{item.trim()}
+														{item !== "" ? item : <br />}
 													</p>
 												))}
 										</div>

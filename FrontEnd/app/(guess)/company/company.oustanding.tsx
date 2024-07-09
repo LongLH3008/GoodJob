@@ -34,7 +34,7 @@ const OutsandingCompany = () => {
 									</div>
 								}
 								children={
-									<div className="relative bg-white shadow-sm col-span-1 rounded-lg flex flex-col justify-between items-center p-10 max-sm:p-5 gap-5 h-96">
+									<div className="relative bg-white shadow-md col-span-1 rounded-lg flex flex-col justify-between items-center p-10 max-sm:p-5 gap-5 h-96">
 										{item._count.Reviews > 0 && (
 											<span className="absolute right-1 top-1 bg-gradient-to-tr from-orange-200 from-2% via-orange-500 via-60% to-orange-200  rounded-md p-2 text-white grid place-items-center">
 												<Star strokeWidth={1.25} />

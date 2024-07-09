@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { Notification } from "./navbar.user.notification";
-import { InfoState, UserState } from "@/lib/hooks/user";
+import { ContactState, InfoState, UserState } from "@/lib/hooks/user";
 import { instance } from "@/lib/api/api";
 import { toast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
@@ -42,8 +42,7 @@ export function UserControl() {
 		(async () => {
 			if (isLogged && isLogged !== "") {
 				getUser(isLogged);
-			}
-			if (!isLogged && user.isLogged) {
+			} else {
 				await Logout();
 			}
 		})();
@@ -59,19 +58,17 @@ export function UserControl() {
 				duration: 5000,
 			});
 			user.resetUser();
+			InfoState.getState().resetInfo();
+			ContactState.getState().resetContact();
 			router.push("/");
 		} catch (error: any) {
-			toast({
-				description: error.response
-					? error.response.data
-					: "Could not connect to server. Please try again later",
-				duration: 3500,
-				action: error.response ? (
-					<Lock strokeWidth={1.25} className="text-red-500" />
-				) : (
-					<Unplug strokeWidth={1.25} className="text-red-500" />
-				),
-			});
+			if (!error.response.data) {
+				toast({
+					description: "Could not connect to server. Please try again later",
+					duration: 3500,
+					action: <Unplug strokeWidth={1.25} className="text-red-500" />,
+				});
+			}
 			error.response.data && router.push("/");
 		}
 	};

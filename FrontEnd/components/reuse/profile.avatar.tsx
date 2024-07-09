@@ -1,7 +1,7 @@
 "use client";
 
 import { uploadState } from "@/lib/hooks/useCloudinary";
-import React, { useState, ChangeEvent, useRef } from "react";
+import React, { ChangeEvent, useRef } from "react";
 import { ImageOff, ImageUp } from "lucide-react";
 import { toast } from "../ui/use-toast";
 

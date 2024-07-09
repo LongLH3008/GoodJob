@@ -30,6 +30,7 @@ const generateSignature = (public_id: string, apiSecret: string) => {
 };
 
 export const handleDeleteImage = async (src: string) => {
+	if (src == null) return;
 	const public_id =
 		`${process.env.NEXT_PUBLIC_CLOUDINARY_FOLDER}` +
 		src.split(`${process.env.NEXT_PUBLIC_CLOUDINARY_FOLDER}`)[1].split(".")[0];
@@ -53,7 +54,7 @@ export const handleDeleteImage = async (src: string) => {
 };
 
 export const handleUpload = async (file: File) => {
-	if (!file) return;
+	if (!file || file == null) return;
 
 	try {
 		const formData = new FormData();

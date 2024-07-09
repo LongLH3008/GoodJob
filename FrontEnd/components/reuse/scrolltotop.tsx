@@ -16,11 +16,11 @@ const ScrollToTop = () => {
 
 	return (
 		<button
-			className={`hidden lg:grid fixed right-[5%] bottom-[20%] w-[54px] h-[54px] text-[#ff9c00] border border-zinc-400 hover:text-[#ff9c00] rounded-md bg-transparent hover:duration-100 place-items-center ease-in duration-300 
+			className={`hover:shadow-2xl hover:shadow-current hover:bg-white grid fixed right-[5%] bottom-[20%] w-9 h-9 lg:w-[54px] lg:h-[54px] text-[#ff9c00] border border-zinc-300 hover:text-[#ff9c00] rounded-full bg-transparent hover:duration-100 place-items-center ease-in 
             ${scroll > 500 ? "z-50 opacity-100" : "-z-50 opacity-0"}`}
 			onClick={scrolltotop}
 		>
-			<ChevronUp className="" />
+			<ChevronUp className="text-sm" />
 		</button>
 	);
 };
