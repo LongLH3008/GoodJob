@@ -9,8 +9,8 @@ import NextLogo from "../../public/next.svg";
 function Footer() {
 	return (
 		<>
-			<StickyFooter className="hidden lg:block">
-				<div className="flex flex-col gap-5 justify-end items-center">
+			<StickyFooter className="h-[440px]">
+				<div className="w-full flex flex-col gap-5 justify-end items-center">
 					<Image src={Logo} width={200} height={100} className="w-52 h-auto" alt="logo" />
 					<div className="w-2/5 gap-10 flex justify-between items-start py-3">
 						<ul className="text-[11px] max-sm:text-sm flex flex-col gap-2">

@@ -16,8 +16,8 @@ const RelatedJobs = ({ profession, id }: { id: string; profession: string }) => 
 		<div className="bg-white p-5 border-t-4 border-zinc-500 rounded-lg flex flex-col gap-5 *:flex *:items-center *:gap-10 text-zinc-600">
 			<p className="text-lg font-sans font-semibold text-zinc-700 mb-5">Related Job</p>
 			<ScrollArea className="max-h-96">
-				{data?.metadata.recr_list.length > 0 ? (
-					data?.metadata.recr_list.map((item: any) => (
+				{data?.recr_list.length > 0 ? (
+					data?.recr_list.map((item: any) => (
 						<SkeletonProvider
 							key={item.id}
 							skeleton={

@@ -7,7 +7,7 @@ class CVController {
 	static async getAllCv(req: Request, res: Response) {
 		return new API_Response({
 			message: "Get all CV successfully",
-			metadata: await CV.getAll(),
+			metadata: await CV.getAll(req.query),
 		}).send(res);
 	}
 
@@ -53,7 +53,7 @@ class CVController {
 	static async getAllImportCv(req: Request, res: Response) {
 		return new API_Response({
 			message: "Get all CV successfully",
-			metadata: await CV_Import.getAll(),
+			metadata: await CV_Import.getAll(req.query),
 		}).send(res);
 	}
 

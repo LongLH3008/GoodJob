@@ -11,6 +11,7 @@ import useSWRMutation from "swr/mutation";
 import { SwrExecute } from "@/lib/hooks/swr";
 import { socket } from "@/lib/api/socket";
 import { toast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 type Review = {
 	vote: "" | vote_t;
@@ -31,6 +32,9 @@ const WriteReview = ({ company_id }: { company_id: string }) => {
 	const [vote, setVote] = useState("");
 	const { id } = UserState();
 	const [open, setOpen] = useState(false);
+
+	const router = useRouter();
+
 	const form = useForm<Review>({
 		resolver: joiResolver(validate),
 	});
@@ -41,6 +45,9 @@ const WriteReview = ({ company_id }: { company_id: string }) => {
 			socket.emit("getReview", company_id);
 		},
 		onError: async (error) => {
+			if (error.response.data == "You need to provide your information first") {
+				router.push(`/applicant-profile/${id}`);
+			}
 			toast({
 				title: "Review failed",
 				description: error.response

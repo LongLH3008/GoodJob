@@ -32,7 +32,7 @@ const DetailCompanyPage = (props: Props) => {
 	}, []);
 
 	const { data } = useSWR(`/company/${id}`, SwrFetcher);
-	const company = data?.metadata;
+	const company = data;
 
 	return (
 		<>
@@ -244,7 +244,7 @@ const DetailCompanyPage = (props: Props) => {
 					<div className="res_layout bg-zinc-100">
 						<ListJobs company_id={company.id} />
 					</div>
-					<CompanyList business={company.business} />
+					<CompanyList business={company.business} id={company.id} />
 				</>
 			)}
 		</>

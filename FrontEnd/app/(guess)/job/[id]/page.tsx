@@ -25,6 +25,7 @@ import RelatedJobs from "./jobdetail.related";
 import SkeletonProvider from "@/components/reuse/skeleton";
 import { UserState } from "@/lib/hooks/user";
 import SkeletonJobDetail from "./jobdetail.skeletion";
+import { ApplyJob } from "./jobdetail.apply";
 
 type Props = {};
 
@@ -32,7 +33,13 @@ const JobDetail = (props: Props) => {
 	const { id } = useParams();
 	const { id: user_id, email } = UserState();
 	const { data, isLoading } = useSWR(`/recr/${id}`, SwrFetcher);
-	const job = data?.metadata;
+	const job = data;
+
+	// passing mutate
+	const recr = {
+		id: job?.id,
+		mutate_key: `/recr/${id}`,
+	};
 
 	return (
 		<>
@@ -108,10 +115,7 @@ const JobDetail = (props: Props) => {
 													for the response
 												</Link>
 											) : (
-												<Button className="order-last text-center col-span-1 border hover:text-white border-zinc-400 text-primary hover:border-orange-400 bg-transparent hover_navlink gap-2">
-													Apply
-													<ClipboardCopy strokeWidth={1.25} />
-												</Button>
+												<ApplyJob recr={recr} />
 											)}
 
 											<Button className="text-center col-span-1 border hover:text-white border-zinc-400 bg-transparent text-primary gap-2">
