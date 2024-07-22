@@ -30,7 +30,7 @@ const ListJobs = ({ company_id }: { company_id?: string }) => {
 	);
 
 	const nextPage = () => {
-		if (page < Math.ceil(data?.metadata.total / parseInt(limit))) setPage(page + 1);
+		if (page < Math.ceil(data?.total / parseInt(limit))) setPage(page + 1);
 	};
 
 	const previousPage = () => {
@@ -41,7 +41,7 @@ const ListJobs = ({ company_id }: { company_id?: string }) => {
 		<div className={`py-5 ${isChange ? "hidden" : "block"} `}>
 			<p className="text-lg text-zinc-600 mb-5">Job list</p>
 			<div className="grid grid-cols-3 gap-3 max-lg:grid-cols-2 max-[700px]:grid-cols-1">
-				{data?.metadata.recr_list.map((item: any) => (
+				{data?.recr_list.map((item: any) => (
 					<SkeletonProvider
 						key={item.id}
 						skeleton={
@@ -61,7 +61,7 @@ const ListJobs = ({ company_id }: { company_id?: string }) => {
 							</div>
 						}
 						children={
-							<div className="relative col-span-1 h-32 p-3 rounded-lg flex justify-between gap-4 items-center bg-white shadow-md">
+							<div className="relative col-span-1 p-3 rounded-lg flex justify-between gap-4 items-center bg-white shadow-md">
 								{item.recommended == "1" && (
 									<Star
 										color="#ff9c00"
@@ -78,7 +78,7 @@ const ListJobs = ({ company_id }: { company_id?: string }) => {
 										src={item.Company.avatar}
 										width={100}
 										height={100}
-										className="w-full h-auto object-cover"
+										className="w-full h-full object-cover"
 										alt="c"
 									/>
 								</Link>
@@ -107,7 +107,7 @@ const ListJobs = ({ company_id }: { company_id?: string }) => {
 					/>
 				))}
 			</div>
-			{Math.ceil(data?.metadata.total / parseInt(limit)) > 1 && (
+			{Math.ceil(data?.total / parseInt(limit)) > 1 && (
 				<div className="flex items-center justify-center gap-2 mt-3">
 					<span
 						onClick={() => previousPage()}
@@ -117,22 +117,20 @@ const ListJobs = ({ company_id }: { company_id?: string }) => {
 					>
 						<ChevronLeft size={18} strokeWidth={1.25} />
 					</span>
-					{Array.from({ length: Math.ceil(data?.metadata.total / parseInt(limit)) }).map(
-						(_, index) => (
-							<span
-								key={index}
-								onClick={() => setPage(index + 1)}
-								className={`w-8 h-8 rounded-lg grid place-items-center cursor-pointer shadow-md
+					{Array.from({ length: Math.ceil(data?.total / parseInt(limit)) }).map((_, index) => (
+						<span
+							key={index}
+							onClick={() => setPage(index + 1)}
+							className={`w-8 h-8 rounded-lg grid place-items-center cursor-pointer shadow-md
 						${page == index + 1 ? "bg-gradient-to-br from-orange-500 to-orange-200 text-white" : "text-zinc-500 bg-white"}`}
-							>
-								{index + 1}
-							</span>
-						)
-					)}
+						>
+							{index + 1}
+						</span>
+					))}
 					<span
 						onClick={() => nextPage()}
 						className={`${
-							page == Math.ceil(data?.metadata.total / parseInt(limit)) && "hidden"
+							page == Math.ceil(data?.total / parseInt(limit)) && "hidden"
 						} text-zinc-500 w-8 h-8 rounded-lg grid place-items-center cursor-pointer shadow-md bg-white hover_navlink hover:text-white`}
 					>
 						<ChevronRight size={18} strokeWidth={1.25} />

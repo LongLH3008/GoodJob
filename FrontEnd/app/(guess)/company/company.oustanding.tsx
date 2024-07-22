@@ -23,7 +23,7 @@ const OutsandingCompany = () => {
 			<p className="text-lg text-zinc-600 mb-5">Outstanding Company</p>
 			<Carousel plugins={[plugin.current]} className={`w-full`}>
 				<CarouselContent className="w-full">
-					{data?.metadata.map((item: any) => (
+					{data?.map((item: any) => (
 						<CarouselItem key={item.id} className="md:basis-1/2 max-h-fit lg:basis-1/3">
 							<SkeletonProvider
 								skeleton={

@@ -91,6 +91,7 @@ class Company {
 				business: filter.business,
 				name: { contains: filter.name },
 				address: { contains: filter.location },
+				id: { not: filter.id },
 			},
 		});
 		const companies = await prisma.company.findMany({
@@ -98,6 +99,7 @@ class Company {
 				business: filter.business,
 				name: { contains: filter.name },
 				address: { contains: filter.location },
+				id: { not: filter.id },
 				Reviews: {},
 			},
 			orderBy: { createAt: filter.order },

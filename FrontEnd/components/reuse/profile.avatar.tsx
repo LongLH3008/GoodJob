@@ -12,8 +12,18 @@ const ProfileAvatar = ({ avatarSrc }: { avatarSrc: string }) => {
 
 	const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files) {
-			const allowType = ["jpg", "png", "svg+xml", "gif", "jpeg"];
+			const allowType = [
+				"jpg",
+				"png",
+				"svg+xml",
+				"gif",
+				"jpeg",
+				"pdf",
+				"vnd.openxmlformats-officedocument.wordprocessingml.document",
+			];
 			const selectedFile = event.target.files[0];
+			// console.log(selectedFile?.type?.split("/")[1]);
+
 			if (!allowType.includes(selectedFile?.type?.split("/")[1])) {
 				toast({
 					description: "File invalid (.png, .svg, .xml, .jpeg, .gif, .jpeg)",

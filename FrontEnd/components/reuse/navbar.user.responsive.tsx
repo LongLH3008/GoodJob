@@ -157,7 +157,7 @@ export function UserlControlResponsive() {
 									</Link>
 								</SheetClose>
 								<SheetClose asChild>
-									<Link href={"/"} className="flex items-center gap-3">
+									<Link href={"/cv"} className="flex items-center gap-3">
 										<SquarePen strokeWidth={1.25} className="mr-2 h-5 w-5" />
 										<span>CV</span>
 									</Link>

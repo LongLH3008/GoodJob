@@ -21,8 +21,11 @@ class CV_Import {
 		return file;
 	}
 
-	static async getAll() {
-		const files = await prisma.cV_import.findMany();
+	static async getAll(filter: any) {
+		const files = await prisma.cV_import.findMany({
+			where: filter,
+			orderBy: { createAt: "desc" },
+		});
 		if (!files.length) throw new API_Error("There are no import files", StatusCode.NOT_FOUND);
 		return files;
 	}

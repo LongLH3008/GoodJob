@@ -43,15 +43,12 @@ class CV {
 			switch (action) {
 				case "create":
 					if (CV.length + CV_import.length + 1 > CV_Services.totalCv)
-						throw new API_Error(
-							"CV creations has reached the limit, Upgrade for more",
-							StatusCode.UNAUTHORIZED
-						);
+						throw new API_Error(`CV creations has reached the limit`, StatusCode.UNAUTHORIZED);
 					break;
 				case "turnOnRecommended": {
 					if (cv.length + 1 > CV_Services.recommended)
 						throw new API_Error(
-							"CV recommended has reached the limit, Upgrade for more",
+							"CV recommended has reached the limit",
 							StatusCode.UNAUTHORIZED
 						);
 					break;
@@ -69,8 +66,11 @@ class CV {
 		return true;
 	}
 
-	static async getAll() {
-		const cv_list = await prisma.cV.findMany();
+	static async getAll(filter: any) {
+		const cv_list = await prisma.cV.findMany({
+			where: filter,
+			orderBy: { createAt: "desc" },
+		});
 		if (!cv_list.length) throw new API_Error("No Cv found", StatusCode.NOT_FOUND);
 		return cv_list;
 	}
@@ -88,7 +88,19 @@ class CV {
 					select: {
 						id: true,
 						recr_info_status: true,
-						Recruitment: true,
+						Recruitment: {
+							select: {
+								id: true,
+								job: true,
+								end: true,
+								salary: true,
+								location: true,
+								company_id: true,
+								slug: true,
+								recommended: true,
+								Company: { select: { avatar: true, name: true } },
+							},
+						},
 					},
 				},
 			},

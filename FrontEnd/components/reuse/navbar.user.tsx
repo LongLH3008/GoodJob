@@ -98,7 +98,7 @@ export function UserControl() {
 						<DropdownMenuTrigger className="cursor-pointer z-30" asChild>
 							<div className="h-8 w-8 rounded-full overflow-hidden flex items-center justify-center">
 								<Image
-									width={200}
+									width={100}
 									height={100}
 									src={
 										info.avatar && info.avatar !== null
@@ -106,7 +106,7 @@ export function UserControl() {
 											: "/user.png"
 									}
 									alt="Description of my image"
-									className="w-full h-auto object-cover"
+									className="w-full h-full object-cover"
 								/>
 							</div>
 						</DropdownMenuTrigger>
@@ -134,7 +134,7 @@ export function UserControl() {
 								</DropdownMenuItem>
 								<DropdownMenuItem className="py-0">
 									<Link
-										href={"/"}
+										href={`/cv`}
 										className="flex items-center w-full h-full py-2 text-sm"
 									>
 										<SquarePen className="mr-2 h-4 w-4" strokeWidth={1.25} />

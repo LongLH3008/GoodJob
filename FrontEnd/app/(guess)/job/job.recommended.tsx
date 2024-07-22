@@ -27,7 +27,7 @@ const RecommendedJobs = (props: Props) => {
 	}, []);
 
 	const nextPage = () => {
-		if (page < Math.ceil(data?.metadata.total / parseInt(limit))) setPage(page + 1);
+		if (page < Math.ceil(data?.total / parseInt(limit))) setPage(page + 1);
 	};
 
 	const previousPage = () => {
@@ -39,7 +39,7 @@ const RecommendedJobs = (props: Props) => {
 		<div className={`py-10  ${isChange ? "hidden" : "block"}`}>
 			<p className="text-lg text-zinc-600 mb-5">Recommended Jobs</p>
 			<div className="grid grid-cols-3 gap-3 max-lg:grid-cols-2 max-[700px]:grid-cols-1">
-				{data?.metadata.recr_list.map((item: any) => (
+				{data?.recr_list.map((item: any) => (
 					<SkeletonProvider
 						key={item.id}
 						skeleton={
@@ -105,7 +105,7 @@ const RecommendedJobs = (props: Props) => {
 					/>
 				))}
 			</div>
-			{Math.ceil(data?.metadata.total / parseInt(limit)) > 1 && (
+			{Math.ceil(data?.total / parseInt(limit)) > 1 && (
 				<div className="flex items-center justify-center gap-2 mt-3">
 					<span
 						onClick={() => previousPage()}
@@ -115,7 +115,7 @@ const RecommendedJobs = (props: Props) => {
 					>
 						<ChevronLeft size={18} strokeWidth={1.25} />
 					</span>
-					{Array.from({ length: Math.ceil(data?.metadata.total / parseInt(limit)) }).map(
+					{Array.from({ length: Math.ceil(data?.total / parseInt(limit)) }).map(
 						(_, index) => (
 							<span
 								key={index}
@@ -130,7 +130,7 @@ const RecommendedJobs = (props: Props) => {
 					<span
 						onClick={() => nextPage()}
 						className={`${
-							page == Math.ceil(data?.metadata.total / parseInt(limit)) && "hidden"
+							page == Math.ceil(data?.total / parseInt(limit)) && "hidden"
 						} text-zinc-500 w-8 h-8 rounded-lg grid place-items-center cursor-pointer shadow-md bg-white hover_navlink hover:text-white`}
 					>
 						<ChevronRight size={18} strokeWidth={1.25} />
